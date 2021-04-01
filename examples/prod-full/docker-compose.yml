@@ -67,7 +67,7 @@ services:
   ilserver:
     depends_on:
       - ilias
-    image: ghcr.io/fluxfw/ilias-ilserver:java-8
+    image: ghcr.io/fluxfw/ilias-ilserver:java8
     restart: always
     volumes:
       - ./ilias:/var/www/html
