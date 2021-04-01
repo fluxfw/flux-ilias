@@ -1,0 +1,37 @@
+version: "3.6"
+services:
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=...
+      - MYSQL_PASSWORD=...
+    image: ghcr.io/fluxfw/ilias-mysql:5.7
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/log/mysql:/var/log/mysql
+  ilias:
+    depends_on:
+      - mysql
+    environment:
+      - ILIAS_COMMON_MASTER_PASSWORD=...
+      - ILIAS_DATABASE_PASSWORD=...
+      - ILIAS_HTTP_PATH=http://%host_ip%
+      - ILIAS_ROOT_USER_PASSWORD=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
+    image: ghcr.io/fluxfw/ilias-dev:php7.4
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/ilias:/var/log/ilias
+      - ./data/log/xdebug:/var/log/xdebug
+  nginx:
+    depends_on:
+      - ilias
+    image: ghcr.io/fluxfw/ilias-nginx:1.19
+    ports:
+      - %host_ip%:80:80
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias/web:/var/iliasdata/web
+      - ./data/log/nginx:/var/log/nginx

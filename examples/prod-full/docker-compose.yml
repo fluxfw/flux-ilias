@@ -1,0 +1,87 @@
+version: "3.6"
+services:
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=...
+      - MYSQL_PASSWORD=...
+    image: ghcr.io/fluxfw/ilias-mysql:5.7
+    restart: always
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+      - ./data/log/mysql:/var/log/mysql
+  ilias:
+    depends_on:
+      - mysql
+    environment:
+      - ILIAS_COMMON_MASTER_PASSWORD=...
+      - ILIAS_CRON_USER_PASSWORD=...
+      - ILIAS_DATABASE_PASSWORD=...
+      - ILIAS_HTTP_PATH=https://%host_ip%
+      - ILIAS_LUEANCE_SEARCH=true
+      - ILIAS_ROOT_USER_PASSWORD=...
+      - ILIAS_SMTP_HOST=...
+      - ILIAS_SMTP_PORT=465
+      - ILIAS_SMTP_ENCRYPTION=tls
+      - ILIAS_SMPT_USER=...
+      - ILIAS_SMTP_PASSWORD=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
+      - ILIAS_CHATROOM_HTTPS_CERT=/certs/ilias.crt
+      - ILIAS_CHATROOM_HTTPS_KEY=/certs/ilias.key
+      - ILIAS_CHATROOM_HTTPS_DHPARAM=/certs/ilias.pem
+    image: ghcr.io/fluxfw/ilias:php7.4
+    restart: always
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/ilias:/var/log/ilias
+  nginx:
+    depends_on:
+      - ilias
+    environment:
+      - ILIAS_NGINX_HTTPS_CERT=/certs/ilias.crt
+      - ILIAS_NGINX_HTTPS_KEY=/certs/ilias.key
+      - ILIAS_NGINX_HTTPS_DHPARAM=/certs/ilias.pem
+    image: ghcr.io/fluxfw/ilias-nginx:1.19
+    ports:
+      - %host_ip%:80:80
+      - %host_ip%:443:443
+    restart: always
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias/web:/var/iliasdata/web
+      - ./data/log/nginx:/var/log/nginx
+      - ./data/certs:/certs:ro
+  cron:
+    depends_on:
+      - ilias
+    environment:
+      - ILIAS_CRON_USER_PASSWORD=...
+    image: ghcr.io/fluxfw/ilias-cron:php7.4
+    restart: always
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/ilias:/var/log/ilias
+  ilserver:
+    depends_on:
+      - ilias
+    image: ghcr.io/fluxfw/ilias-ilserver:java-8
+    restart: always
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/ilserver:/var/log/ilserver
+  chatroom:
+    depends_on:
+      - ilias
+    image: ghcr.io/fluxfw/ilias-chatroom:nodejs10
+    ports:
+      - %host_ip%:8080:8080
+    restart: always
+    volumes:
+      - ./ilias:/var/www/html
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/chatroom:/var/log/chatroom
+      - ./data/certs:/certs:ro
