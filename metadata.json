@@ -1,0 +1,16 @@
+{
+  "description": "ILIAS docker images based on alpine linux and with nginx and php-fpm",
+  "keywords": [
+    "alpine",
+    "chatroom",
+    "cron",
+    "docker",
+    "fpm",
+    "ilias",
+    "ilserver",
+    "mysql",
+    "nginx",
+    "php"
+  ],
+  "homepage": "https://github.com/fluxfw/ilias-docker"
+}
