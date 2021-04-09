@@ -16,7 +16,9 @@
     "database": null,
     "user": null,
     "password": null,
-    "create_database": null
+    "create_database": null,
+    "collation": null,
+    "path_to_db_dump": null
   },
   "filesystem": {
     "data_dir": null
