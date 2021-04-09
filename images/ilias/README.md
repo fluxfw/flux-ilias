@@ -42,6 +42,8 @@ The php config and the setup config is automatic generated based set the follow 
 | ILIAS_DATABASE_USER | Database user | ilias |
 | **ILIAS_DATABASE_PASSWORD** | Database password | *-* |
 | ILIAS_DATABASE_CREATE_DATABASE | Auto create database | true |
+| ILIAS_DATABASE_COLLATION | Init database collation | utf8_general_ci |
+| ILIAS_DATABASE_PATH_TO_DB_DUMP | Init database dump | *%ILIAS_WEB_DIR%*/setup/sql/ilias3.sql |
 | ILIAS_GLOBALCACHE_SERVICE | Global cache type | *-* |
 | ILIAS_GLOBALCACHE_COMPONENTS | Global cache components<br>`all` or separate by spaces | *-* |
 | ILIAS_GLOBALCACHE_MEMCACHED_NODES | Memcache nodes<br>JSON string | *-* |
