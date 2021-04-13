@@ -22,8 +22,6 @@ The xdebug config is automatic generated based set the follow environment variab
 | ILIAS_PHP_XDEBUG_OUTPUT_DIR | Output dir | *%ILIAS_PHP_XDEBUG_LOG_DIR%*/output |
 | ILIAS_PHP_XDEBUG_START_WITH_REQUEST | Start with request | trigger |
 
-TODO: Currently xdebug is not working yet
-
 The follow environment variables from [ILIAS php-fpm image](../ilias) has a different default value
 
 | Variable | Description | Default value |
