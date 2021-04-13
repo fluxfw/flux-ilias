@@ -17,11 +17,10 @@ The xdebug config is automatic generated based set the follow environment variab
 | ILIAS_PHP_XDEBUG_DISCOVER_CLIENT_HOST | Discover client host | true |
 | ILIAS_PHP_XDEBUG_LOG_DIR | Path to log directory<br>This is a volume | /var/log/xdebug |
 | ILIAS_PHP_XDEBUG_LOG_FILE | Path to log file | *%ILIAS_PHP_XDEBUG_LOG_DIR%*/xdebug.log |
+| ILIAS_PHP_XDEBUG_LOG_LEVEL | Log level | 7 |
 | ILIAS_PHP_XDEBUG_MODE | Modes | develop,debug,profile |
 | ILIAS_PHP_XDEBUG_OUTPUT_DIR | Output dir | *%ILIAS_PHP_XDEBUG_LOG_DIR%*/output |
 | ILIAS_PHP_XDEBUG_START_WITH_REQUEST | Start with request | trigger |
-
-TODO: Currently xdebug is not working yet
 
 The follow environment variables from [ILIAS php-fpm image](../ilias) has a different default value
 
