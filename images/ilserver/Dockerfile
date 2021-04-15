@@ -24,6 +24,8 @@ VOLUME $ILIAS_WEB_DIR
 
 EXPOSE $ILIAS_ILSERVER_PORT
 
+WORKDIR $ILIAS_WEB_DIR
+
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

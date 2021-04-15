@@ -161,6 +161,8 @@ VOLUME $ILIAS_WEB_DIR
 
 EXPOSE $ILIAS_PHP_PORT
 
+WORKDIR $ILIAS_WEB_DIR
+
 COPY ./scripts /scripts
 
 COPY ./entrypoint.sh /entrypoint.sh
