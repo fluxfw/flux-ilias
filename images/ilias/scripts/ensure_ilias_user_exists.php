@@ -16,7 +16,9 @@ run_in_ilias(function () : void {
         $user->setTitle($user->getFullname());
 
         $user->setPasswd($user_password);
-        $user->setLastPasswordChangeTS(time());
+        $user->setLastPasswordChangeToNow();
+        $user->setPasswordPolicyResetStatus(false);
+        $user->setIsSelfRegistered(true);
 
         $user->setActive(true);
         $user->setTimeLimitUnlimited(true);
@@ -29,7 +31,8 @@ run_in_ilias(function () : void {
         $user = new ilObjUser(ilObjUser::_lookupId($user_login));
 
         $user->setPasswd($user_password);
-        $user->setLastPasswordChangeTS(time());
+        $user->setPasswordPolicyResetStatus(false);
+        $user->setIsSelfRegistered(true);
 
         $user->update();
     }
