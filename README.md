@@ -28,6 +28,13 @@ These docker images are supporting minimal ILIAS 6, older versions will not work
 
 If you want/need, you can add some plugins or skins to `ilias/Customizing/...`
 
+If you use a system like git or so, you should also add a `.gitignore` file with the follow content for ensure not to push installation data like database, logs, ...
+
+```gitignore
+*
+!docker-compose.yml
+```
+
 You can start/update the containers with the follow command
 
 ```shell
