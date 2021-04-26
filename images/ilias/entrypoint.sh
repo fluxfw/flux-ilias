@@ -86,14 +86,20 @@ memory_limit = $ILIAS_PHP_MEMORY_LIMIT
 post_max_size = $ILIAS_PHP_POST_MAX_SIZE
 upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.ini"
 
+if [ ! -d "$ILIAS_WEB_DIR/setup/templates" ]; then
+  composer=composer2
+else
+  composer=composer1
+fi
+
   if [ -f "$ILIAS_WEB_DIR/composer.json" ]; then
     echo "Install composer dependencies"
     case $PHP_VERSION in
       8.*)
-        composer install -d "$ILIAS_WEB_DIR" --no-dev --ignore-platform-reqs
+        $composer install -d "$ILIAS_WEB_DIR" --no-dev --ignore-platform-reqs
       ;;
       *)
-        composer install -d "$ILIAS_WEB_DIR" --no-dev
+        $composer install -d "$ILIAS_WEB_DIR" --no-dev
       ;;
     esac
 
