@@ -35,7 +35,7 @@ echo "server_tokens $ILIAS_NGINX_SERVER_TOKENS;
 access_log $ILIAS_NGINX_ACCESS_LOG_FILE $ILIAS_NGINX_ACCESS_LOG_LEVEL;
 error_log $ILIAS_NGINX_ERROR_LOG_FILE $ILIAS_NGINX_ERROR_LOG_LEVEL;
 server {
-  index index.php index.html;
+	index index.php index.html;
 
 	$listen
 
