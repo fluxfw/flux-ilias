@@ -40,4 +40,4 @@ for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
 done
 
 echo "Start ilserver"
-$start_ilserver
+exec $start_ilserver

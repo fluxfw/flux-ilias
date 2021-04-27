@@ -15,4 +15,4 @@ mkdir -p "$ILIAS_MYSQL_LOG_DIR"
 chown mysql:mysql -R "$ILIAS_MYSQL_LOG_DIR"
 
 echo "Start mysql"
-/entrypoint.sh mysqld
+exec /entrypoint.sh mysqld

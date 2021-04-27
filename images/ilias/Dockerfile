@@ -10,7 +10,8 @@ RUN case $PHP_VERSION in 8.*) pecl install pecl install "channel://pecl.php.net/
 ENV ILIAS_PDFGENERATION_PATH_TO_PHANTOM_JS /usr/local/bin/phantomjs
 RUN curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C / && curl -k -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar -jxvf - -C . && mv phantomjs-2.1.1-linux-x86_64/bin/phantomjs "$ILIAS_PDFGENERATION_PATH_TO_PHANTOM_JS" && rm -fR phantomjs-2.1.1-linux-x86_64
 
-COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:1.10 /usr/bin/composer /usr/bin/composer1
+COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer2
 
 ENV _ILIAS_WWW_DATA www-data:www-data
 ENV _ILIAS_EXEC_AS_WWW_DATA su-exec $_ILIAS_WWW_DATA
@@ -160,6 +161,8 @@ VOLUME $ILIAS_LOG_DIR
 VOLUME $ILIAS_WEB_DIR
 
 EXPOSE $ILIAS_PHP_PORT
+
+WORKDIR $ILIAS_WEB_DIR
 
 COPY ./scripts /scripts
 

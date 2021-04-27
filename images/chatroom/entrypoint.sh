@@ -23,4 +23,4 @@ for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
 done
 
 echo "Start chatroom"
-$start_chatroom
+exec $start_chatroom

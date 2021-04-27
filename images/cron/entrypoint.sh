@@ -18,4 +18,4 @@ for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
 done
 
 echo "Start cron"
-crond -f
+exec crond -f

@@ -3,6 +3,8 @@
 The follow NodeJS versions are available
 
 - 10
+- 12
+- 14
 
 Main config will take from ILIAS self, but the follow environment variables are available
 

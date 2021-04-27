@@ -88,12 +88,21 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
 
   if [ -f "$ILIAS_WEB_DIR/composer.json" ]; then
     echo "Install composer dependencies"
+
+    if [ ! -d "$ILIAS_WEB_DIR/setup/templates" ]; then
+      echo "Use composer 2"
+      composer=composer2
+    else
+      echo "Use composer 1"
+      composer=composer1
+    fi
+
     case $PHP_VERSION in
       8.*)
-        composer install -d "$ILIAS_WEB_DIR" --no-dev --ignore-platform-reqs
+        $composer install -d "$ILIAS_WEB_DIR" --no-dev --ignore-platform-reqs
       ;;
       *)
-        composer install -d "$ILIAS_WEB_DIR" --no-dev
+        $composer install -d "$ILIAS_WEB_DIR" --no-dev
       ;;
     esac
 
@@ -119,7 +128,7 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
   fi
 
   if [ -f "$ILIAS_WEB_DIR/setup/cli.php" ]; then
-    echo "(Re)generate ILIAS $(basename "$ILIAS_CONFIG_FILE")"
+    echo "(Re)generate ILIAS setup cli $(basename "$ILIAS_CONFIG_FILE")"
     $_ILIAS_EXEC_AS_WWW_DATA php /scripts/generate_ilias_config/generate_ilias_config.php
 
     if [ -d "$ILIAS_FILESYSTEM_WEB_DATA_DIR/$ILIAS_COMMON_CLIENT_ID/usr_images" ]; then
@@ -230,4 +239,4 @@ for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
 done
 
 echo "Start php-fpm"
-/usr/local/bin/docker-php-entrypoint php-fpm
+exec /usr/local/bin/docker-php-entrypoint php-fpm
