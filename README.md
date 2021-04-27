@@ -16,6 +16,8 @@ It is assumed that docker and docker-compose is already installed on your server
 
 For start download a `docker-compose.yml` of the [examples folder](examples) to the directory in which you want to store ILIAS and adjust placeholders
 
+Please also download the `.gitignore` for ensure not to push installation data like database, logs, ...
+
 Builds of the docker images are available on the github docker registry, if you prefer to build self, look at the [gitlab ci file](.gitlab-ci.yml) how to do (You don't need gitlab) - The build process can take over 30 minutes (Depending on which images and versions you wish to build)
 
 The design of the docker images is that the ILIAS source code and maybe plugins/skins are maintained separate from this
@@ -31,13 +33,6 @@ git clone -b release_%version% https://github.com/ILIAS-eLearning/ILIAS ilias
 And if needed manually clone some plugins or skins to `ilias/Customizing/...`
 
 These docker images are supporting minimal ILIAS 6, older versions will not work
-
-If you use a system like git or so, you should also add a `.gitignore` file with the follow content for ensure not to push installation data like database, logs, ...
-
-```gitignore
-*
-!docker-compose.yml
-```
 
 You can start/update the containers with the follow command
 
