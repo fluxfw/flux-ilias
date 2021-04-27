@@ -48,7 +48,7 @@ build:
       done
 
       docker build images/nginx --pull -t $CI_REGISTRY_IMAGE/nginx:latest;
-      docker push $nginx_image;
+      docker push $CI_REGISTRY_IMAGE/nginx:latest;
 
     - docker logout $CI_REGISTRY
   only:
