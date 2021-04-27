@@ -236,4 +236,4 @@ for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
 done
 
 echo "Start php-fpm"
-/usr/local/bin/docker-php-entrypoint php-fpm
+exec /usr/local/bin/docker-php-entrypoint php-fpm

@@ -60,4 +60,4 @@ for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
 done
 
 echo "Start nginx"
-/docker-entrypoint.sh nginx -g "daemon off;"
+exec /docker-entrypoint.sh nginx -g "daemon off;"
