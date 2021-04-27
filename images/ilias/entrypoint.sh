@@ -128,7 +128,7 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
   fi
 
   if [ -f "$ILIAS_WEB_DIR/setup/cli.php" ]; then
-    echo "(Re)generate ILIAS $(basename "$ILIAS_CONFIG_FILE")"
+    echo "(Re)generate ILIAS setup cli $(basename "$ILIAS_CONFIG_FILE")"
     $_ILIAS_EXEC_AS_WWW_DATA php /scripts/generate_ilias_config/generate_ilias_config.php
 
     if [ -d "$ILIAS_FILESYSTEM_WEB_DATA_DIR/$ILIAS_COMMON_CLIENT_ID/usr_images" ]; then

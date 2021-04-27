@@ -18,15 +18,19 @@ For start download a `docker-compose.yml` of the [examples folder](examples) to 
 
 Builds of the docker images are available on the github docker registry, if you prefer to build self, look at the [gitlab ci file](.gitlab-ci.yml) how to do (You don't need gitlab) - The build process can take over 30 minutes (Depending on which images and versions you wish to build)
 
-The design of the docker images is that the ILIAS source code and maybe plugins/skins are maintained separate from this, so clone ILIAS to the same directory as your `docker-compose.yml` with the follow command (Adjust version number)
+The design of the docker images is that the ILIAS source code and maybe plugins/skins are maintained separate from this
+
+Either you can use additional [repos-fetcher](https://github.com/fluxfw/repos-fetcher) for maintain the used repos in a single `repos.yml` file (See more infos there)
+
+Or manually clone ILIAS with the follow command (Adjust version number)
 
 ```shell
 git clone -b release_%version% https://github.com/ILIAS-eLearning/ILIAS ilias
 ```
 
-These docker images are supporting minimal ILIAS 6, older versions will not work
+And if needed manually clone some plugins or skins to `ilias/Customizing/...`
 
-If you want/need, you can add some plugins or skins to `ilias/Customizing/...`
+These docker images are supporting minimal ILIAS 6, older versions will not work
 
 If you use a system like git or so, you should also add a `.gitignore` file with the follow content for ensure not to push installation data like database, logs, ...
 
