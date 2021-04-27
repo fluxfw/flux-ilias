@@ -12,11 +12,11 @@ Addition there are images for cron, ilserver and chatroom
 
 There is also an image of php-fpm for development
 
-It is assumed that docker and docker-compose is already installed on your server and you have some basic knowledge of this
+It is assumed that docker and docker-compose is already installed on your server, and you have some basic knowledge of this
 
 For start download a `docker-compose.yml` of the [examples folder](examples) to the directory in which you want to store ILIAS and adjust placeholders
 
-Builds of the docker images are available on the github docker registry, if you prefere to build self, look at the [gitlab ci file](.gitlab-ci.yml) how to do (You don't need gitlab) - The build process can take over 30 minutes (Depending which images and versions you wish to build)
+Builds of the docker images are available on the github docker registry, if you prefer to build self, look at the [gitlab ci file](.gitlab-ci.yml) how to do (You don't need gitlab) - The build process can take over 30 minutes (Depending on which images and versions you wish to build)
 
 The design of the docker images is that the ILIAS source code and maybe plugins/skins are maintained separate from this, so clone ILIAS to the same directory as your `docker-compose.yml` with the follow command (Adjust version number)
 
