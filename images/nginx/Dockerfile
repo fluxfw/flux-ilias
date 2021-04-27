@@ -1,5 +1,4 @@
-ARG NGINX_VERSION
-FROM nginx:$NGINX_VERSION-alpine
+FROM nginx:1.20-alpine
 
 RUN unlink /etc/nginx/conf.d/default.conf
 COPY ./rewrites.conf /etc/nginx/ilias-rewrites.conf

@@ -32,7 +32,7 @@ services:
   nginx:
     depends_on:
       - ilias
-    image: ghcr.io/fluxfw/ilias-nginx:1.20
+    image: ghcr.io/fluxfw/ilias-nginx:latest
     ports:
       - %host_ip%:80:80
     volumes:

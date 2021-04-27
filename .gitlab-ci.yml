@@ -6,7 +6,6 @@ variables:
   PHP_VERSIONS: "7.2 7.3 7.4 8.0"
   JAVA_VERSIONS: "8"
   NODEJS_VERSIONS: "10 12 14"
-  NGINX_VERSIONS: "1.19 1.20"
   GITHUB_DOCKER_REGISTRY_URL: ghcr.io
   GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX: $GITHUB_DOCKER_REGISTRY_URL/fluxfw/ilias
 
@@ -48,11 +47,8 @@ build:
         docker push $chatroom_image;
       done
 
-    - for nginx_version in $NGINX_VERSIONS; do
-        nginx_image=$CI_REGISTRY_IMAGE/nginx:$nginx_version;
-        docker build images/nginx --pull --build-arg NGINX_VERSION=$nginx_version -t $nginx_image;
-        docker push $nginx_image;
-      done
+      docker build images/nginx --pull -t $CI_REGISTRY_IMAGE/nginx:latest;
+      docker push $nginx_image;
 
     - docker logout $CI_REGISTRY
   only:
@@ -103,12 +99,8 @@ publish:
         docker push $chatroom_image_github;
       done
 
-    - for nginx_version in $NGINX_VERSIONS; do
-        nginx_image=$CI_REGISTRY_IMAGE/nginx:$nginx_version;
-        nginx_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-nginx:$nginx_version;
-        docker tag $nginx_image $nginx_image_github;
-        docker push $nginx_image_github;
-      done
+      docker tag $CI_REGISTRY_IMAGE/nginx:latest $GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-nginx:latest;
+      docker push $GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-nginx:latest;
 
     - docker logout $GITHUB_DOCKER_REGISTRY_URL
   only:

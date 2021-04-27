@@ -43,7 +43,7 @@ services:
       - ILIAS_NGINX_HTTPS_CERT=/certs/ilias.crt
       - ILIAS_NGINX_HTTPS_KEY=/certs/ilias.key
       - ILIAS_NGINX_HTTPS_DHPARAM=/certs/ilias.pem
-    image: ghcr.io/fluxfw/ilias-nginx:1.20
+    image: ghcr.io/fluxfw/ilias-nginx:latest
     ports:
       - %host_ip%:80:80
       - %host_ip%:443:443
