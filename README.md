@@ -53,7 +53,7 @@ docker-compose logs -f
 
 After some minutes (Depending on first run or state of database) you can access the installation according port forwarding configuration in `docker-compose.yml` on your web browser
 
-If ILIAS is not init yet, the cron, ilserver and chatroom containers will exit, you need to restart it manually after that
+If ILIAS is not init yet, the cron, ilserver and chatroom containers will exit, you need to restart it manually after that (May you should temporarily remove `restart:always` to avoid endless restart loop)
 
 The example `docker-compose.yml` store the ilias data in a `data` folder on your working directory
 
