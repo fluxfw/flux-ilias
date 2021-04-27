@@ -71,7 +71,7 @@ Here a brief overview of the folder structure of the default configuration
 - data
     - mysql > Mounted to `/var/lib/mysql` inside mysql container
     - ilias > Mounted to `/var/iliasdata` inside most containers
-      - config.json
+      - config.json > (Re)generated config for ILIAS setup cli
       - ilias.ini.php
       - default
         - chatroom
