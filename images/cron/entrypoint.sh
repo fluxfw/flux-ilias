@@ -13,7 +13,7 @@ echo "$ILIAS_CRON_PERIOD $_ILIAS_EXEC_AS_WWW_DATA $(which php) $ILIAS_WEB_DIR/cr
 crontab "$ILIAS_CRON_FILE"
 
 echo "Unset ILIAS env variables (For not show in PHP variables or log files)"
-for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
+for var in $(printenv | grep "ILIAS_" | sed 's/=.*$//'); do
   unset "$var"
 done
 

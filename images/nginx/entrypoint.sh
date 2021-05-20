@@ -55,7 +55,7 @@ server {
 mkdir -p "$ILIAS_NGINX_LOG_DIR"
 
 echo "Unset ILIAS env variables (For not show in PHP variables or log files)"
-for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
+for var in $(printenv | grep "ILIAS_" | sed 's/=.*$//'); do
   unset "$var"
 done
 
