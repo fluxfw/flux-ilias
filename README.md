@@ -22,7 +22,7 @@ Builds of the docker images are available on the github docker registry, if you 
 
 The design of the docker images is that the ILIAS source code and maybe plugins/skins are maintained separate from this
 
-Either you can use additional [repos-fetcher](https://github.com/fluxfw/repos-fetcher) for maintain the used repos in a single `repos.yml` file (See more infos there)
+Either you can use additional [repos-fetcher](https://github.com/fluxapps/repos-fetcher) for maintain the used repos in a single `repos.yml` file (See more infos there)
 
 Or manually clone ILIAS with the follow command (Adjust version number)
 

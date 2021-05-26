@@ -4,7 +4,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=...
       - MYSQL_PASSWORD=...
-    image: ghcr.io/fluxfw/ilias-mysql:5.7
+    image: ghcr.io/fluxapps/ilias-mysql:5.7
     restart: always
     volumes:
       - ./data/mysql:/var/lib/mysql
@@ -20,7 +20,7 @@ services:
       - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
-    image: ghcr.io/fluxfw/ilias:php7.4
+    image: ghcr.io/fluxapps/ilias:php7.4
     restart: always
     volumes:
       - ./ilias:/var/www/html
@@ -33,7 +33,7 @@ services:
       - ILIAS_NGINX_HTTPS_CERT=/certs/ilias.crt
       - ILIAS_NGINX_HTTPS_KEY=/certs/ilias.key
       - ILIAS_NGINX_HTTPS_DHPARAM=/certs/ilias.pem
-    image: ghcr.io/fluxfw/ilias-nginx:latest
+    image: ghcr.io/fluxapps/ilias-nginx:latest
     ports:
       - %host_ip%:80:80
       - %host_ip%:443:443

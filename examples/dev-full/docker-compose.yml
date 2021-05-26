@@ -4,7 +4,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=...
       - MYSQL_PASSWORD=...
-    image: ghcr.io/fluxfw/ilias-mysql:5.7
+    image: ghcr.io/fluxapps/ilias-mysql:5.7
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./data/log/mysql:/var/log/mysql
@@ -23,7 +23,7 @@ services:
       - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
-    image: ghcr.io/fluxfw/ilias-dev:php7.4
+    image: ghcr.io/fluxapps/ilias-dev:php7.4
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -32,7 +32,7 @@ services:
   nginx:
     depends_on:
       - ilias
-    image: ghcr.io/fluxfw/ilias-nginx:latest
+    image: ghcr.io/fluxapps/ilias-nginx:latest
     ports:
       - %host_ip%:80:80
     volumes:
@@ -44,7 +44,7 @@ services:
       - ilias
     environment:
       - ILIAS_CRON_USER_PASSWORD=...
-    image: ghcr.io/fluxfw/ilias-cron-dev:php7.4
+    image: ghcr.io/fluxapps/ilias-cron-dev:php7.4
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -53,7 +53,7 @@ services:
   ilserver:
     depends_on:
       - ilias
-    image: ghcr.io/fluxfw/ilias-ilserver:java8
+    image: ghcr.io/fluxapps/ilias-ilserver:java8
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -61,7 +61,7 @@ services:
   chatroom:
     depends_on:
       - ilias
-    image: ghcr.io/fluxfw/ilias-chatroom:nodejs10
+    image: ghcr.io/fluxapps/ilias-chatroom:nodejs10
     ports:
       - %host_ip%:8080:8080
     volumes:

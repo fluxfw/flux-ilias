@@ -234,7 +234,7 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
 fi
 
 echo "Unset ILIAS env variables (For not show in PHP variables or log files)"
-for var in $(printenv | grep "ILIAS" | sed 's/=.*$//'); do
+for var in $(printenv | grep "ILIAS_" | sed 's/=.*$//'); do
   unset "$var"
 done
 
