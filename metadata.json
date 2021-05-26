@@ -12,5 +12,5 @@
     "nginx",
     "php"
   ],
-  "homepage": "https://github.com/fluxfw/ilias-docker"
+  "homepage": "https://github.com/fluxapps/ilias-docker"
 }
