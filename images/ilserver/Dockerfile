@@ -1,6 +1,9 @@
 ARG JAVA_VERSION
 FROM openjdk:$JAVA_VERSION-jre-alpine
 
+LABEL org.opencontainers.image.source="https://github.com/fluxapps/ilias-docker"
+LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
+
 ENV ILIAS_COMMON_CLIENT_ID default
 ENV ILIAS_FILESYSTEM_DATA_DIR /var/iliasdata
 ENV ILIAS_FILESYSTEM_INI_PHP_FILE $ILIAS_FILESYSTEM_DATA_DIR/ilias.ini.php
