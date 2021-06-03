@@ -1,7 +1,7 @@
 ARG NODEJS_VERSION
 FROM node:$NODEJS_VERSION-alpine
 
-LABEL org.opencontainers.image.source="https://github.com/fluxapps/ilias-docker"
+LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
 ENV ILIAS_COMMON_CLIENT_ID default

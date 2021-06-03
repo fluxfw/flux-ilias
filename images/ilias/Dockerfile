@@ -1,7 +1,7 @@
 ARG PHP_VERSION
 FROM php:$PHP_VERSION-fpm-alpine
 
-LABEL org.opencontainers.image.source="https://github.com/fluxapps/ilias-docker"
+LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
 RUN apk add --no-cache curl ffmpeg freetype-dev ghostscript imagemagick libjpeg-turbo-dev libpng-dev libxslt-dev libzip-dev mariadb-client openldap-dev patch su-exec unzip zlib-dev zip $PHPIZE_DEPS

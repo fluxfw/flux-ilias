@@ -1,7 +1,7 @@
 ARG JAVA_VERSION
 FROM openjdk:$JAVA_VERSION-jre-alpine
 
-LABEL org.opencontainers.image.source="https://github.com/fluxapps/ilias-docker"
+LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
 ENV ILIAS_COMMON_CLIENT_ID default
