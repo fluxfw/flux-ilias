@@ -1,4 +1,4 @@
-# ILIAS docker images
+# FluxIlias
 
 This project contains docker images for ILIAS based on alpine linux (Expect database image)
 
