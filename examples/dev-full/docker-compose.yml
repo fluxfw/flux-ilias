@@ -4,7 +4,7 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=...
       - MYSQL_PASSWORD=...
-    image: ghcr.io/fluxapps/ilias-mysql:5.7
+    image: docker-registry.fluxpublisher.ch/flux-ilias/mysql:5.7
     volumes:
       - ./data/mysql:/var/lib/mysql
       - ./data/log/mysql:/var/log/mysql
@@ -15,7 +15,7 @@ services:
       - ILIAS_COMMON_MASTER_PASSWORD=...
       - ILIAS_CRON_USER_PASSWORD=...
       - ILIAS_DATABASE_PASSWORD=...
-      - ILIAS_HTTP_PATH=http://%host_ip%
+      - ILIAS_HTTP_PATH=https://%host_ip%
       - ILIAS_LUEANCE_SEARCH=true
       - ILIAS_ROOT_USER_PASSWORD=...
       - ILIAS_SMTP_HOST=smtp
@@ -23,7 +23,7 @@ services:
       - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
-    image: ghcr.io/fluxapps/ilias-dev:php7.4
+    image: docker-registry.fluxpublisher.ch/flux-ilias/ilias-dev:php7.4
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -32,9 +32,9 @@ services:
   nginx:
     depends_on:
       - ilias
-    image: ghcr.io/fluxapps/ilias-nginx:latest
+    image: docker-registry.fluxpublisher.ch/flux-ilias/nginx:latest
     ports:
-      - %host_ip%:80:80
+      - [%host_ip%:]80:80
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias/web:/var/iliasdata/web
@@ -44,7 +44,7 @@ services:
       - ilias
     environment:
       - ILIAS_CRON_USER_PASSWORD=...
-    image: ghcr.io/fluxapps/ilias-cron-dev:php7.4
+    image: docker-registry.fluxpublisher.ch/flux-ilias/cron-dev:php7.4
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -53,7 +53,7 @@ services:
   ilserver:
     depends_on:
       - ilias
-    image: ghcr.io/fluxapps/ilias-ilserver:java8
+    image: docker-registry.fluxpublisher.ch/flux-ilias/ilserver:java8
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -61,9 +61,9 @@ services:
   chatroom:
     depends_on:
       - ilias
-    image: ghcr.io/fluxapps/ilias-chatroom:nodejs10
+    image: docker-registry.fluxpublisher.ch/flux-ilias/chatroom:nodejs10
     ports:
-      - %host_ip%:8080:8080
+      - [%host_ip%:]8080:8080
     volumes:
       - ./ilias:/var/www/html
       - ./data/ilias:/var/iliasdata
@@ -71,4 +71,4 @@ services:
   smtp:
     image: mailhog/mailhog:latest
     ports:
-      - %host_ip%:8025:8025
+      - [%host_ip%:]8025:8025

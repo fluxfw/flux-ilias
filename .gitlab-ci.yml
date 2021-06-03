@@ -6,25 +6,26 @@ variables:
   PHP_VERSIONS: "7.2 7.3 7.4 8.0"
   JAVA_VERSIONS: "8"
   NODEJS_VERSIONS: "10 12 14"
-  GITHUB_DOCKER_REGISTRY_URL: ghcr.io
-  GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX: $GITHUB_DOCKER_REGISTRY_URL/fluxapps/ilias
+  DOCKER_REGISTRY_NAME: flux-ilias
+  DEV_DOCKER_REGISTRY_IMAGE: $DEV_DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_NAME
+  DOCKER_REGISTRY_IMAGE: $DOCKER_REGISTRY_URL/$DOCKER_REGISTRY_NAME
 
 build:
   stage: build
   script:
-    - echo -n $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY
+    - echo -n $DEV_DOCKER_REGISTRY_PASSWORD | docker login -u $DEV_DOCKER_REGISTRY_USER --password-stdin $DEV_DOCKER_REGISTRY_URL
 
     - for mysql_version in $MYSQL_VERSIONS; do
-        mysql_image=$CI_REGISTRY_IMAGE/mysql:$mysql_version;
+        mysql_image=$DEV_DOCKER_REGISTRY_IMAGE/mysql:$mysql_version;
         docker build images/mysql --pull --build-arg MYSQL_VERSION=$mysql_version -t $mysql_image;
         docker push $mysql_image;
       done
 
     - for php_version in $PHP_VERSIONS; do
-        ilias_image=$CI_REGISTRY_IMAGE/ilias:php$php_version;
-        ilias_dev_image=$CI_REGISTRY_IMAGE/ilias-dev:php$php_version;
-        cron_image=$CI_REGISTRY_IMAGE/cron:php$php_version;
-        cron_dev_image=$CI_REGISTRY_IMAGE/cron-dev:php$php_version;
+        ilias_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias:php$php_version;
+        ilias_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias-dev:php$php_version;
+        cron_image=$DEV_DOCKER_REGISTRY_IMAGE/cron:php$php_version;
+        cron_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/cron-dev:php$php_version;
         docker build images/ilias --pull --build-arg PHP_VERSION=$php_version -t $ilias_image;
         docker push $ilias_image;
         docker build images/ilias-dev --pull --build-arg ILIAS_IMAGE=$ilias_image -t $ilias_dev_image;
@@ -36,47 +37,47 @@ build:
       done
 
     - for java_version in $JAVA_VERSIONS; do
-        ilserver_image=$CI_REGISTRY_IMAGE/ilserver:java$java_version;
+        ilserver_image=$DEV_DOCKER_REGISTRY_IMAGE/ilserver:java$java_version;
         docker build images/ilserver --pull --build-arg JAVA_VERSION=$java_version -t $ilserver_image;
         docker push $ilserver_image;
       done
 
     - for nodejs_version in $NODEJS_VERSIONS; do
-        chatroom_image=$CI_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
+        chatroom_image=$DEV_DOCKER_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
         docker build images/chatroom --pull --build-arg NODEJS_VERSION=$nodejs_version -t $chatroom_image;
         docker push $chatroom_image;
       done
 
-      docker build images/nginx --pull -t $CI_REGISTRY_IMAGE/nginx:latest;
-      docker push $CI_REGISTRY_IMAGE/nginx:latest;
+      docker build images/nginx --pull -t $DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
+      docker push $DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
 
-    - docker logout $CI_REGISTRY
+    - docker logout $DEV_DOCKER_REGISTRY_URL
   only:
     - /^develop$/
 
 publish:
   stage: deploy
   script:
-    - echo -n $CI_JOB_TOKEN | docker login -u $CI_REGISTRY_USER --password-stdin $CI_REGISTRY;
-      echo -n $GITHUB_DOCKER_REGISTRY_PASSWORD | docker login -u $GITHUB_DOCKER_REGISTRY_USER --password-stdin $GITHUB_DOCKER_REGISTRY_URL;
+    - echo -n $DEV_DOCKER_REGISTRY_PASSWORD | docker login -u $DEV_DOCKER_REGISTRY_USER --password-stdin $DEV_DOCKER_REGISTRY_URL;
+      echo -n $GITHUB_DOCKER_REGISTRY_PASSWORD | docker login -u $GITHUB_DOCKER_REGISTRY_USER --password-stdin $DOCKER_REGISTRY_URL;
 
     - for mysql_version in $MYSQL_VERSIONS; do
-        mysql_image=$CI_REGISTRY_IMAGE/mysql:$mysql_version;
-        mysql_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-mysql:$mysql_version;
+        mysql_image=$DEV_DOCKER_REGISTRY_IMAGE/mysql:$mysql_version;
+        mysql_image_github=$DOCKER_REGISTRY_IMAGE-mysql:$mysql_version;
         docker pull $mysql_image;
         docker tag $mysql_image $mysql_image_github;
         docker push $mysql_image_github;
       done
 
     - for php_version in $PHP_VERSIONS; do
-        ilias_image=$CI_REGISTRY_IMAGE/ilias:php$php_version;
-        ilias_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX:php$php_version;
-        ilias_dev_image=$CI_REGISTRY_IMAGE/ilias-dev:php$php_version;
-        ilias_dev_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-dev:php$php_version;
-        cron_image=$CI_REGISTRY_IMAGE/cron:php$php_version;
-        cron_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-cron:php$php_version;
-        cron_dev_image=$CI_REGISTRY_IMAGE/cron-dev:php$php_version;
-        cron_dev_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-cron-dev:php$php_version;
+        ilias_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias:php$php_version;
+        ilias_image_github=$DOCKER_REGISTRY_IMAGE:php$php_version;
+        ilias_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias-dev:php$php_version;
+        ilias_dev_image_github=$DOCKER_REGISTRY_IMAGE-dev:php$php_version;
+        cron_image=$DEV_DOCKER_REGISTRY_IMAGE/cron:php$php_version;
+        cron_image_github=$DOCKER_REGISTRY_IMAGE-cron:php$php_version;
+        cron_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/cron-dev:php$php_version;
+        cron_dev_image_github=$DOCKER_REGISTRY_IMAGE-cron-dev:php$php_version;
         docker pull $ilias_image;
         docker tag $ilias_image $ilias_image_github;
         docker push $ilias_image_github;
@@ -92,28 +93,28 @@ publish:
       done
 
     - for java_version in $JAVA_VERSIONS; do
-        ilserver_image=$CI_REGISTRY_IMAGE/ilserver:java$java_version;
-        ilserver_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-ilserver:java$java_version;
+        ilserver_image=$DEV_DOCKER_REGISTRY_IMAGE/ilserver:java$java_version;
+        ilserver_image_github=$DOCKER_REGISTRY_IMAGE-ilserver:java$java_version;
         docker pull $ilserver_image;
         docker tag $ilserver_image $ilserver_image_github;
         docker push $ilserver_image_github;
       done
 
     - for nodejs_version in $NODEJS_VERSIONS; do
-        chatroom_image=$CI_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
-        chatroom_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-chatroom:nodejs$nodejs_version;
+        chatroom_image=$DEV_DOCKER_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
+        chatroom_image_github=$DOCKER_REGISTRY_IMAGE-chatroom:nodejs$nodejs_version;
         docker pull $chatroom_image;
         docker tag $chatroom_image $chatroom_image_github;
         docker push $chatroom_image_github;
       done
 
-    - nginx_image=$CI_REGISTRY_IMAGE/nginx:latest;
-      nginx_image_github=$GITHUB_DOCKER_REGISTRY_IMAGE_PREFIX-nginx:latest;
+    - nginx_image=$DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
+      nginx_image_github=$DOCKER_REGISTRY_IMAGE-nginx:latest;
       docker pull $nginx_image;
       docker tag $nginx_image $nginx_image_github;
       docker push $nginx_image_github;
 
-    - docker logout $CI_REGISTRY;
-      docker logout $GITHUB_DOCKER_REGISTRY_URL;
+    - docker logout $DEV_DOCKER_REGISTRY_URL;
+      docker logout $DOCKER_REGISTRY_URL;
   only:
     - /^master$/

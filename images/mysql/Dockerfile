@@ -1,6 +1,9 @@
 ARG MYSQL_VERSION
 FROM mysql:$MYSQL_VERSION
 
+LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
+LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
+
 ENV ILIAS_MYSQL_BIND_ADDRESS 0.0.0.0
 ENV ILIAS_MYSQL_PORT 3306
 ENV ILIAS_MYSQL_CHARACTER_SET_SERVER utf8
