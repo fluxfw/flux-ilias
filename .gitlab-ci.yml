@@ -117,4 +117,4 @@ publish:
     - docker logout $DEV_DOCKER_REGISTRY_URL;
       docker logout $DOCKER_REGISTRY_URL;
   only:
-    - /^master$/
+    - /^main$/
