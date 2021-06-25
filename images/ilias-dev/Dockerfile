@@ -1,8 +1,11 @@
 ARG ILIAS_IMAGE
 FROM $ILIAS_IMAGE
 
-RUN pecl install xdebug
-RUN docker-php-ext-enable xdebug
+RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
+    pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
+    docker-php-source delete && \
+    apk del .build-deps
 
 ENV ILIAS_PHP_XDEBUG_DISCOVER_CLIENT_HOST true
 ENV ILIAS_PHP_XDEBUG_CLIENT_PORT 9003
