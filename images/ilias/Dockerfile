@@ -7,7 +7,7 @@ LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 RUN apk add --no-cache curl ffmpeg freetype-dev ghostscript imagemagick libjpeg-turbo-dev libpng-dev libxslt-dev libzip-dev mariadb-client openldap-dev patch su-exec unzip zlib-dev zip $PHPIZE_DEPS && \
     case $PHP_VERSION in 8.*|7.4*) docker-php-ext-configure gd --with-freetype --with-jpeg ;; *) docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ ;; esac && \
     docker-php-ext-install gd ldap mysqli pdo_mysql soap xsl zip && \
-    case $PHP_VERSION in 8.*) pecl install pecl install "channel://pecl.php.net/xmlrpc-1.0.0RC2" && docker-php-ext-enable xmlrpc ;; *) docker-php-ext-install xmlrpc ;; esac && \
+    case $PHP_VERSION in 8.*) pecl install "channel://pecl.php.net/xmlrpc-1.0.0RC2" && docker-php-ext-enable xmlrpc ;; *) docker-php-ext-install xmlrpc ;; esac && \
     docker-php-source delete
 
 ENV ILIAS_PDFGENERATION_PATH_TO_PHANTOM_JS /usr/local/bin/phantomjs
