@@ -4,11 +4,13 @@ FROM php:$PHP_VERSION-fpm-alpine
 LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
-RUN apk add --no-cache curl ffmpeg freetype-dev ghostscript imagemagick libjpeg-turbo-dev libpng-dev libxslt-dev libzip-dev mariadb-client openldap-dev patch su-exec unzip zlib-dev zip $PHPIZE_DEPS && \
+RUN apk add --no-cache curl ffmpeg freetype-dev ghostscript imagemagick libjpeg-turbo-dev libpng-dev libxslt-dev libzip-dev mariadb-client openldap-dev patch su-exec unzip zlib-dev zip && \
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
     case $PHP_VERSION in 8.*|7.4*) docker-php-ext-configure gd --with-freetype --with-jpeg ;; *) docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ ;; esac && \
     docker-php-ext-install gd ldap mysqli pdo_mysql soap xsl zip && \
     case $PHP_VERSION in 8.*) pecl install "channel://pecl.php.net/xmlrpc-1.0.0RC2" && docker-php-ext-enable xmlrpc ;; *) docker-php-ext-install xmlrpc ;; esac && \
-    docker-php-source delete
+    docker-php-source delete && \
+    apk del .build-deps
 
 ENV ILIAS_PDFGENERATION_PATH_TO_PHANTOM_JS /usr/local/bin/phantomjs
 RUN curl -Ls "https://github.com/dustinblackman/phantomized/releases/download/2.1.1a/dockerized-phantomjs.tar.gz" | tar xz -C / && curl -k -Ls https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-2.1.1-linux-x86_64.tar.bz2 | tar -jxvf - -C . && mv phantomjs-2.1.1-linux-x86_64/bin/phantomjs "$ILIAS_PDFGENERATION_PATH_TO_PHANTOM_JS" && rm -fR phantomjs-2.1.1-linux-x86_64
