@@ -1,6 +1,3 @@
-include:
-  - https://utils.fluxpublisher.ch/FluxPublishUtils.yml
-
 variables:
   MYSQL_VERSIONS: "5.6 5.7 8.0"
   PHP_VERSIONS: "7.2 7.3 7.4 8.0"
@@ -54,6 +51,14 @@ build:
     - docker logout $DEV_DOCKER_REGISTRY_URL
   only:
     - /^develop$/
+
+FluxPublishUtils:
+  stage: build
+  image: docker-registry.fluxpublisher.ch/flux-publish-utils:latest
+  script:
+    - "false"
+  only:
+    - /^main$/
 
 publish:
   stage: deploy
