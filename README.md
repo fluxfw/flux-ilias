@@ -109,7 +109,7 @@ Here a brief overview of the folder structure of the default configuration
         - ilias.cert
         - ilias.key
         - ilias.pem
-    
+
 You can find more information (For example possible environment variables) in the corresponding readme in the [images folder](images)
 
 To remove the containers, you can use the follow command
