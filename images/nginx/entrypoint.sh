@@ -47,6 +47,7 @@ server {
 		try_files \$uri =404;
 		include fastcgi_params;
 		fastcgi_pass $ILIAS_NGINX_PHP_HOST:$ILIAS_NGINX_PHP_PORT;
+		fastcgi_read_timeout $ILIAS_NGINX_PHP_READ_TIMEOUT;
 		fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
 		fastcgi_param SERVER_NAME \$host;
 	}
