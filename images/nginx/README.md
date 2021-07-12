@@ -20,6 +20,7 @@ The nginx config is automatic generated based set the follow environment variabl
 | ILIAS_NGINX_PHP_PORT | ILIAS php-fpm port | 9000 |
 | ILIAS_NGINX_SERVER_TOKENS | Show nginx server tokens | off |
 | ILIAS_NGINX_CLIENT_MAX_BODY_SIZE | Maximal upload size | 200M |
+| ILIAS_NGINX_PHP_READ_TIMEOUT | Maximal execution time | 900 |
 
 Minimal variables required to set are **bold**
 
