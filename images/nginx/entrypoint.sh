@@ -41,6 +41,8 @@ server {
 
 	root $ILIAS_WEB_DIR/;
 
+	client_max_body_size $ILIAS_NGINX_CLIENT_MAX_BODY_SIZE;
+
 	location ~ \.php$ {
 		try_files \$uri =404;
 		include fastcgi_params;
