@@ -19,14 +19,20 @@ build:
       done
 
     - for php_version in $PHP_VERSIONS; do
+        ilias_base_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias-base:php$php_version;
         ilias_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias:php$php_version;
         ilias_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias-dev:php$php_version;
+        cron_base_image=$DEV_DOCKER_REGISTRY_IMAGE/cron-base:php$php_version;
         cron_image=$DEV_DOCKER_REGISTRY_IMAGE/cron:php$php_version;
         cron_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/cron-dev:php$php_version;
-        docker build images/ilias --pull --build-arg PHP_VERSION=$php_version -t $ilias_image;
+        docker build images/ilias/base --pull --build-arg PHP_VERSION=$php_version -t $ilias_base_image;
+        docker push $ilias_base_image;
+        docker build images/ilias --pull --build-arg ILIAS_IMAGE=$ilias_base_image -t $ilias_image;
         docker push $ilias_image;
         docker build images/ilias-dev --pull --build-arg ILIAS_IMAGE=$ilias_image -t $ilias_dev_image;
         docker push $ilias_dev_image;
+        docker build images/cron --pull --build-arg ILIAS_IMAGE=$ilias_base_image -t $cron_base_image;
+        docker push $cron_base_image;
         docker build images/cron --pull --build-arg ILIAS_IMAGE=$ilias_image -t $cron_image;
         docker push $cron_image;
         docker build images/cron --pull --build-arg ILIAS_IMAGE=$ilias_dev_image -t $cron_dev_image;
@@ -34,18 +40,26 @@ build:
       done
 
     - for java_version in $JAVA_VERSIONS; do
+        ilserver_base_image=$DEV_DOCKER_REGISTRY_IMAGE/ilserver-base:java$java_version;
         ilserver_image=$DEV_DOCKER_REGISTRY_IMAGE/ilserver:java$java_version;
-        docker build images/ilserver --pull --build-arg JAVA_VERSION=$java_version -t $ilserver_image;
+        docker build images/ilserver/base --pull --build-arg JAVA_VERSION=$java_version -t $ilserver_base_image;
+        docker push $ilserver_base_image;
+        docker build images/ilserver --pull --build-arg ILSERVER_IMAGE=$ilserver_base_image -t $ilserver_image;
         docker push $ilserver_image;
       done
 
     - for nodejs_version in $NODEJS_VERSIONS; do
+        chatroom_base_image=$DEV_DOCKER_REGISTRY_IMAGE/chatroom-base:nodejs$nodejs_version;
         chatroom_image=$DEV_DOCKER_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
-        docker build images/chatroom --pull --build-arg NODEJS_VERSION=$nodejs_version -t $chatroom_image;
+        docker build images/chatroom/base --pull --build-arg NODEJS_VERSION=$nodejs_version -t $chatroom_base_image;
+        docker push $chatroom_base_image;
+        docker build images/chatroom --pull --build-arg CHATROOM_IMAGE=$chatroom_base_image -t $chatroom_image;
         docker push $chatroom_image;
       done
 
-      docker build images/nginx --pull -t $DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
+      docker build images/nginx/base --pull -t $DEV_DOCKER_REGISTRY_IMAGE/nginx-base:latest;
+      docker push $DEV_DOCKER_REGISTRY_IMAGE/nginx-base:latest;
+      docker build images/nginx --pull --build-arg NGINX_IMAGE=$DEV_DOCKER_REGISTRY_IMAGE/nginx-base:latest -t $DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
       docker push $DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
 
     - docker logout $DEV_DOCKER_REGISTRY_URL
@@ -75,20 +89,30 @@ publish:
       done
 
     - for php_version in $PHP_VERSIONS; do
+        ilias_base_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias-base:php$php_version;
+        ilias_base_image_pub=$DOCKER_REGISTRY_IMAGE/ilias-base:php$php_version;
         ilias_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias:php$php_version;
         ilias_image_pub=$DOCKER_REGISTRY_IMAGE/ilias:php$php_version;
         ilias_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/ilias-dev:php$php_version;
         ilias_dev_image_pub=$DOCKER_REGISTRY_IMAGE/ilias-dev:php$php_version;
+        cron_base_image=$DEV_DOCKER_REGISTRY_IMAGE/cron-base:php$php_version;
+        cron_base_image_pub=$DOCKER_REGISTRY_IMAGE/cron-base:php$php_version;
         cron_image=$DEV_DOCKER_REGISTRY_IMAGE/cron:php$php_version;
         cron_image_pub=$DOCKER_REGISTRY_IMAGE/cron:php$php_version;
         cron_dev_image=$DEV_DOCKER_REGISTRY_IMAGE/cron-dev:php$php_version;
         cron_dev_image_pub=$DOCKER_REGISTRY_IMAGE/cron-dev:php$php_version;
+        docker pull $ilias_base_image;
+        docker tag $ilias_base_image $ilias_base_image_pub;
+        docker push $ilias_base_image_pub;
         docker pull $ilias_image;
         docker tag $ilias_image $ilias_image_pub;
         docker push $ilias_image_pub;
         docker pull $ilias_dev_image;
         docker tag $ilias_dev_image $ilias_dev_image_pub;
         docker push $ilias_dev_image_pub;
+        docker pull $cron_base_image;
+        docker tag $cron_base_image $cron_base_image_pub;
+        docker push $cron_base_image_pub;
         docker pull $cron_image;
         docker tag $cron_image $cron_image_pub;
         docker push $cron_image_pub;
@@ -98,23 +122,38 @@ publish:
       done
 
     - for java_version in $JAVA_VERSIONS; do
+        ilserver_base_image=$DEV_DOCKER_REGISTRY_IMAGE/ilserver-base:java$java_version;
+        ilserver_base_image_pub=$DOCKER_REGISTRY_IMAGE/ilserver-base:java$java_version;
         ilserver_image=$DEV_DOCKER_REGISTRY_IMAGE/ilserver:java$java_version;
         ilserver_image_pub=$DOCKER_REGISTRY_IMAGE/ilserver:java$java_version;
+        docker pull $ilserver_base_image;
+        docker tag $ilserver_base_image $ilserver_base_image_pub;
+        docker push $ilserver_base_image_pub;
         docker pull $ilserver_image;
         docker tag $ilserver_image $ilserver_image_pub;
         docker push $ilserver_image_pub;
       done
 
     - for nodejs_version in $NODEJS_VERSIONS; do
+        chatroom_base_image=$DEV_DOCKER_REGISTRY_IMAGE/chatroom-base:nodejs$nodejs_version;
+        chatroom_base_image_pub=$DOCKER_REGISTRY_IMAGE/chatroom-base:nodejs$nodejs_version;
         chatroom_image=$DEV_DOCKER_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
         chatroom_image_pub=$DOCKER_REGISTRY_IMAGE/chatroom:nodejs$nodejs_version;
+        docker pull $chatroom_base_image;
+        docker tag $chatroom_base_image $chatroom_base_image_pub;
+        docker push $chatroom_base_image_pub;
         docker pull $chatroom_image;
         docker tag $chatroom_image $chatroom_image_pub;
         docker push $chatroom_image_pub;
       done
 
-    - nginx_image=$DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
+    - nginx_base_image=$DEV_DOCKER_REGISTRY_IMAGE/nginx-base:latest;
+      nginx_base_image_pub=$DOCKER_REGISTRY_IMAGE/nginx-base:latest;
+      nginx_image=$DEV_DOCKER_REGISTRY_IMAGE/nginx:latest;
       nginx_image_pub=$DOCKER_REGISTRY_IMAGE/nginx:latest;
+      docker pull $nginx_base_image;
+      docker tag $nginx_base_image $nginx_base_image_pub;
+      docker push $nginx_base_image_pub;
       docker pull $nginx_image;
       docker tag $nginx_image $nginx_image_pub;
       docker push $nginx_image_pub;
