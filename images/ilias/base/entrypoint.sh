@@ -86,7 +86,7 @@ memory_limit = $ILIAS_PHP_MEMORY_LIMIT
 post_max_size = $ILIAS_PHP_POST_MAX_SIZE
 upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.ini"
 
-  if [ -f "$ILIAS_WEB_DIR/composer.json" ]; then
+  if [ "$_ILIAS_COMPOSER_AUTO_INSTALL" = "true" ] && [ -f "$ILIAS_WEB_DIR/composer.json" ]; then
     echo "Install composer dependencies"
 
     if [ ! -d "$ILIAS_WEB_DIR/setup/templates" ]; then
