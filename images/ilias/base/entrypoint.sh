@@ -135,15 +135,21 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
       echo "Already installed ILIAS detected"
 
       echo "Call ILIAS update setup cli"
-      php "$ILIAS_WEB_DIR/setup/cli.php" update --yes "$ILIAS_CONFIG_FILE"
-
       if [ ! -d "$ILIAS_WEB_DIR/setup/templates" ]; then
+        php "$ILIAS_WEB_DIR/setup/cli.php" update --yes --no-plugins "$ILIAS_CONFIG_FILE"
+
         echo "Call ILIAS migrate setup cli"
-        php "$ILIAS_WEB_DIR/setup/cli.php" migrate --yes
+        php "$ILIAS_WEB_DIR/setup/cli.php" migrate --yes --no-plugins
+      else
+        php "$ILIAS_WEB_DIR/setup/cli.php" update --yes "$ILIAS_CONFIG_FILE"
       fi
     else
       echo "Call ILIAS install setup cli"
-      php "$ILIAS_WEB_DIR/setup/cli.php" install --yes "$ILIAS_CONFIG_FILE"
+      if [ ! -d "$ILIAS_WEB_DIR/setup/templates" ]; then
+        php "$ILIAS_WEB_DIR/setup/cli.php" install --yes --no-plugins "$ILIAS_CONFIG_FILE"
+      else
+        php "$ILIAS_WEB_DIR/setup/cli.php" install --yes "$ILIAS_CONFIG_FILE"
+      fi
     fi
   else
     echo "ILIAS setup cli only works with ILIAS 6 or higher"
