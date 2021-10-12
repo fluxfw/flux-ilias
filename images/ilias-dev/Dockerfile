@@ -23,5 +23,4 @@ ENV ILIAS_DEVMODE true
 VOLUME $ILIAS_PHP_XDEBUG_LOG_DIR
 
 COPY ./entrypoint.sh /entrypoint-dev.sh
-RUN chmod +x /entrypoint-dev.sh
 ENTRYPOINT ["/entrypoint-dev.sh"]

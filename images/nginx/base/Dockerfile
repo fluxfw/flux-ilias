@@ -37,5 +37,4 @@ EXPOSE $ILIAS_NGINX_HTTPS_PORT
 WORKDIR $ILIAS_WEB_DIR
 
 COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

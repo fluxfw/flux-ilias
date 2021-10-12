@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env sh
+
 set -e
 
 if [ -f "$ILIAS_FILESYSTEM_INI_PHP_FILE" ]; then

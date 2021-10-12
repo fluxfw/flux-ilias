@@ -174,5 +174,4 @@ WORKDIR $ILIAS_WEB_DIR
 COPY ./scripts /scripts
 
 COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

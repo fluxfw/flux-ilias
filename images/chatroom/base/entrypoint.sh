@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env sh
+
 set -e
 
 if [ ! -f "$ILIAS_WEB_DIR/ilias.php" ]; then
