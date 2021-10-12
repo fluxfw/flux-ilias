@@ -6,5 +6,4 @@ ENV ILIAS_CRON_LOG_FILE $ILIAS_LOG_DIR/cron.log
 ENV ILIAS_CRON_PERIOD */5 * * * *
 
 COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]

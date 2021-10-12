@@ -20,5 +20,4 @@ VOLUME $ILIAS_MYSQL_LOG_DIR
 EXPOSE $ILIAS_MYSQL_PORT
 
 COPY ./entrypoint.sh /entrypoint-custom.sh
-RUN chmod +x /entrypoint-custom.sh
 ENTRYPOINT ["/entrypoint-custom.sh"]
