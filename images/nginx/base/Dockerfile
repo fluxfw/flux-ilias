@@ -1,4 +1,4 @@
-FROM nginx:1.20-alpine
+FROM nginx:mainline-alpine
 
 RUN unlink /etc/nginx/conf.d/default.conf
 COPY ./rewrites.conf /etc/nginx/ilias-rewrites.conf
