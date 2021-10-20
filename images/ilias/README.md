@@ -62,7 +62,7 @@ The php config and the setup config is automatic generated based set the follow 
 | ILIAS_MEDIAOBJECT_PATH_TO_FFMPEG | Path to ffmpeg file | /usr/bin/ffmpeg |
 | ILIAS_PREVIEW_PATH_TO_GHOSTSCRIPT | Path to gs file | /usr/bin/gs |
 | ILIAS_STYLE_MANAGE_SYSTEM_STYLES | Enable manage system styles | false |
-| ILIAS_STYLE_PATH_TO_LESSC | Path to lessc file | *-* |
+| ILIAS_STYLE_PATH_TO_LESSC | Path to lessc file | /usr/share/lessphp/plessc |
 | ILIAS_SYSTEMFOLDER_CLIENT_NAME | Name | *-*  |
 | ILIAS_SYSTEMFOLDER_CLIENT_DESCRIPTION | Description | *-*  |
 | ILIAS_SYSTEMFOLDER_CLIENT_INSTITUTION | Institution | *-* |
