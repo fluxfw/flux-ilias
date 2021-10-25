@@ -64,7 +64,7 @@ build:
 
     - docker logout $DEV_DOCKER_REGISTRY_URL
   only:
-    - /^develop$/
+    - develop
 
 FluxPublishUtils:
   stage: build
@@ -72,7 +72,7 @@ FluxPublishUtils:
   script:
     - "false"
   only:
-    - /^main$/
+    - main
 
 publish:
   stage: deploy
@@ -161,4 +161,4 @@ publish:
     - docker logout $DEV_DOCKER_REGISTRY_URL;
       docker logout $DOCKER_REGISTRY_URL;
   only:
-    - /^main$/
+    - main
