@@ -7,6 +7,10 @@ RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS && \
     docker-php-source delete && \
     apk del .build-deps
 
+COPY . /FluxIliasDev
+
+ENTRYPOINT ["/FluxIliasDev/bin/entrypoint.sh"]
+
 ENV ILIAS_PHP_XDEBUG_DISCOVER_CLIENT_HOST true
 ENV ILIAS_PHP_XDEBUG_CLIENT_PORT 9003
 ENV ILIAS_PHP_XDEBUG_LOG_DIR /var/log/xdebug
@@ -21,6 +25,3 @@ ENV ILIAS_PHP_DISPLAY_ERRORS On
 ENV ILIAS_DEVMODE true
 
 VOLUME $ILIAS_PHP_XDEBUG_LOG_DIR
-
-COPY ./entrypoint.sh /entrypoint-dev.sh
-ENTRYPOINT ["/entrypoint-dev.sh"]

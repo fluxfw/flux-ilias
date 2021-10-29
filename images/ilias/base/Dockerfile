@@ -22,6 +22,10 @@ RUN (mkdir -p "$(dirname $ILIAS_STYLE_PATH_TO_LESSC)" && cd "$(dirname $ILIAS_ST
 COPY --from=composer:1 /usr/bin/composer /usr/bin/composer1
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer2
 
+COPY . /FluxIlias
+
+ENTRYPOINT ["/FluxIlias/bin/entrypoint.sh"]
+
 ENV _ILIAS_WWW_DATA www-data:www-data
 ENV _ILIAS_EXEC_AS_WWW_DATA su-exec $_ILIAS_WWW_DATA
 
@@ -171,10 +175,3 @@ VOLUME $ILIAS_FILESYSTEM_DATA_DIR
 VOLUME $ILIAS_LOG_DIR
 
 EXPOSE $ILIAS_PHP_PORT
-
-WORKDIR $ILIAS_WEB_DIR
-
-COPY ./scripts /scripts
-
-COPY ./entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]

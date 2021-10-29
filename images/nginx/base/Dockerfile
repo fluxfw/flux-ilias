@@ -1,7 +1,13 @@
 FROM nginx:mainline-alpine
 
+LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
+LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
+
 RUN unlink /etc/nginx/conf.d/default.conf
-COPY ./rewrites.conf /etc/nginx/ilias-rewrites.conf
+
+COPY . /FluxIliasNginx
+
+ENTRYPOINT ["/FluxIliasNginx/bin/entrypoint.sh"]
 
 ENV ILIAS_WEB_DIR /var/www/html
 
@@ -33,8 +39,3 @@ VOLUME $ILIAS_NGINX_LOG_DIR
 
 EXPOSE $ILIAS_NGINX_HTTP_PORT
 EXPOSE $ILIAS_NGINX_HTTPS_PORT
-
-WORKDIR $ILIAS_WEB_DIR
-
-COPY ./entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]

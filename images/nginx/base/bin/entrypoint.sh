@@ -53,7 +53,7 @@ server {
 		fastcgi_param SERVER_NAME \$host;
 	}
 
-	include ilias-rewrites.conf;
+	include /FluxIliasNginx/src/rewrites.conf;
 }" > /etc/nginx/conf.d/ilias.conf
 
 mkdir -p "$ILIAS_NGINX_LOG_DIR"

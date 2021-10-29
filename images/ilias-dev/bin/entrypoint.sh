@@ -15,4 +15,4 @@ mkdir -p "$ILIAS_PHP_XDEBUG_LOG_DIR"
 touch "$ILIAS_PHP_XDEBUG_LOG_FILE"
 chown "$_ILIAS_WWW_DATA" -R "$ILIAS_PHP_XDEBUG_LOG_DIR"
 
-/entrypoint.sh
+exec /FluxIlias/bin/entrypoint.sh

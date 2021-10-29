@@ -4,6 +4,10 @@ FROM openjdk:$JAVA_VERSION-jre-alpine
 LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
+COPY . /FluxIliasIlserver
+
+ENTRYPOINT ["/FluxIliasIlserver/bin/entrypoint.sh"]
+
 ENV ILIAS_COMMON_CLIENT_ID default
 ENV ILIAS_FILESYSTEM_DATA_DIR /var/iliasdata
 ENV ILIAS_FILESYSTEM_INI_PHP_FILE $ILIAS_FILESYSTEM_DATA_DIR/ilias.ini.php
@@ -25,8 +29,3 @@ VOLUME $ILIAS_FILESYSTEM_DATA_DIR
 VOLUME $ILIAS_ILSERVER_LOG_DIR
 
 EXPOSE $ILIAS_ILSERVER_PORT
-
-WORKDIR $ILIAS_WEB_DIR
-
-COPY ./entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]

@@ -1,4 +1,5 @@
 <?php
+
 function run_in_ilias(callable $function) : void
 {
     $init = null;
