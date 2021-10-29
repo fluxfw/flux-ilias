@@ -4,6 +4,10 @@ FROM mysql:$MYSQL_VERSION
 LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
+COPY . /FluxIliasMysql
+
+ENTRYPOINT ["/FluxIliasMysql/bin/entrypoint.sh"]
+
 ENV ILIAS_MYSQL_BIND_ADDRESS 0.0.0.0
 ENV ILIAS_MYSQL_PORT 3306
 ENV ILIAS_MYSQL_CHARACTER_SET_SERVER utf8
@@ -18,6 +22,3 @@ ENV MYSQL_USER ilias
 VOLUME $ILIAS_MYSQL_LOG_DIR
 
 EXPOSE $ILIAS_MYSQL_PORT
-
-COPY ./entrypoint.sh /entrypoint-custom.sh
-ENTRYPOINT ["/entrypoint-custom.sh"]

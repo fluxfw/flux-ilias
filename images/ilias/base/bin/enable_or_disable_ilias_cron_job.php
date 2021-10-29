@@ -1,6 +1,7 @@
+#!/usr/bin/env php
 <?php
 
-require_once __DIR__ . "/_run_in_ilias.php";
+require_once __DIR__ . "/../src/run_in_ilias.php";
 
 run_in_ilias(function () : void {
     global $argv;

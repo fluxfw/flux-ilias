@@ -1,4 +1,6 @@
+#!/usr/bin/env php
 <?php
+
 function config(array $template_config, array $config, string $parent_key) : ?array
 {
     foreach ($template_config as $current_key => $default_value) {
@@ -70,7 +72,7 @@ function config(array $template_config, array $config, string $parent_key) : ?ar
     return $config;
 }
 
-$template_config = json_decode(file_get_contents(__DIR__ . "/template_config.json"), true);
+$template_config = json_decode(file_get_contents(__DIR__ . "/../src/template_config.json"), true);
 
 $config_file = filter_input(INPUT_ENV, "ILIAS_CONFIG_FILE");
 

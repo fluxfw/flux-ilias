@@ -14,7 +14,7 @@ else
   exit 1
 fi
 
-start_chatroom="node $ILIAS_WEB_DIR/Modules/Chatroom/chat/chat.js $ILIAS_CHATROOM_SERVER_CONFIG_FILE $ILIAS_CHATROOM_CLIENT_CONFIG_FILE"
+start_chatroom="$(which node) $ILIAS_WEB_DIR/Modules/Chatroom/chat/chat.js $ILIAS_CHATROOM_SERVER_CONFIG_FILE $ILIAS_CHATROOM_CLIENT_CONFIG_FILE"
 
 mkdir -p "$ILIAS_CHATROOM_LOG_DIR"
 

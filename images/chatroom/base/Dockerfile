@@ -4,6 +4,10 @@ FROM node:$NODEJS_VERSION-alpine
 LABEL org.opencontainers.image.source="https://github.com/fluxapps/FluxIlias"
 LABEL maintainer="fluxlabs <support@fluxlabs.ch> (https://fluxlabs.ch)"
 
+COPY . /FluxIliasChatroom
+
+ENTRYPOINT ["/FluxIliasChatroom/bin/entrypoint.sh"]
+
 ENV ILIAS_COMMON_CLIENT_ID default
 ENV ILIAS_FILESYSTEM_DATA_DIR /var/iliasdata
 ENV ILIAS_WEB_DIR /var/www/html
@@ -18,8 +22,3 @@ VOLUME $ILIAS_CHATROOM_LOG_DIR
 VOLUME $ILIAS_FILESYSTEM_DATA_DIR
 
 EXPOSE $ILIAS_CHATROOM_PORT
-
-WORKDIR $ILIAS_WEB_DIR
-
-COPY ./entrypoint.sh /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]

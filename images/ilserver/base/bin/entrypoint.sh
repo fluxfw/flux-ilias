@@ -31,7 +31,7 @@ ClientId = $ILIAS_COMMON_CLIENT_ID
 IliasIniPath = $ILIAS_FILESYSTEM_INI_PHP_FILE
 NicId = $ILIAS_ILSERVER_NIC_ID" > "$ILIAS_ILSERVER_PROPERTIES_PATH"
 
-start_ilserver="java -jar $ILIAS_WEB_DIR/Services/WebServices/RPC/lib/ilServer.jar $ILIAS_ILSERVER_PROPERTIES_PATH start"
+start_ilserver="$(which java) -jar $ILIAS_WEB_DIR/Services/WebServices/RPC/lib/ilServer.jar $ILIAS_ILSERVER_PROPERTIES_PATH start"
 
 mkdir -p "$ILIAS_ILSERVER_LOG_DIR"
 

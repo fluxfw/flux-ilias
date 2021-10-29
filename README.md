@@ -1,5 +1,7 @@
 # FluxIlias
 
+Experimental Alpha Version
+
 This project contains docker images for ILIAS based on alpine linux (Expect database image)
 
 ILIAS is based on php-fpm
