@@ -1,5 +1,5 @@
 {
-  "description": "ILIAS docker images based on alpine linux and with nginx and php-fpm",
+  "description": "ILIAS docker images based on alpine linux and with nginx and php-fpm (Experimental Alpha Version)",
   "keywords": [
     "alpine",
     "chatroom",
