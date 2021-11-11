@@ -1,125 +1,310 @@
 # FluxIlias
 
-Experimental Alpha Version
+Experimental Beta Version
 
-This project contains docker images for ILIAS based on alpine linux (Expect database image)
+## Notes
 
-ILIAS is based on php-fpm
+- You can directly use the official mysql image if you prefer (Or other database types which ILIAS supports (Currently, only mysql like are supported by this image)), but may it needs some addition config that ILIAS will work, which the ilias mysql contains
+- Even you use a proxy server you should use the ilias nginx image because it contains some dependencies which ILIAS needs (Like URL redirects or XAccel support)
+- The install/update/migrate setup cli is auto be called on container (re)creation
+  - The config json is automatic generated
+  - Auto plugins setup are disabled because it's make problems with some plugins
+- May additional manual config in ILIAS is automatic done
+  - Set/override root user password
+  - Create cron user / Override cron user password
+  - Enable/disable ILIAS development mode
+  - Enable/disable lucene search and lucene index cron job
+  - Set smtp server
+- The external `data` directory and `ilias.ini.php` are symlinks to the internal `data` directory to combine both in one
 
-For the web it uses nginx
+## mysql, ilias and nginx
 
-For the database it uses mysql
+Extends the basic images in a custom `Dockerfile` and copy the ILIAS source code and install composer dependencies
 
-Addition there are images for cron, ilserver and chatroom
+You may wish to copy other things like plugins or skins or apply some patches
 
-There is also an image of php-fpm for development
+```dockerfile
+FROM docker-registry.fluxpublisher.ch/flux-ilias/ilias-base:php7.4 AS ilias
 
-It is assumed that docker and docker-compose is already installed on your server, and you have some basic knowledge of this
+RUN (cd $ILIAS_WEB_DIR && wget -O - https://github.com/ILIAS-eLearning/ILIAS/archive/release_7.tar.gz | tar -xz --strip-components=1 && composer2 install --no-dev) && \
+    (mkdir -p $ILIAS_WEB_DIR/Customizing/global/plugins/Services/X/Y/Z && cd $ILIAS_WEB_DIR/Customizing/global/plugins/Services/X/Y/Z && wget -O - https://github.com/x/y/archive/z.tar.gz | tar -xz --strip-components=1) && \
+    ...
 
-For start download a `docker-compose.yml` of the [examples folder](examples) to the directory in which you want to store ILIAS and adjust placeholders
-
-Please also download the `.gitignore` for ensure not to push installation data like database, logs, ...
-
-Builds of the docker images are available on the github docker registry, if you prefer to build self, look at the [gitlab ci file](.gitlab-ci.yml) how to do (You don't need gitlab) - The build process can take over 30 minutes (Depending on which images and versions you wish to build)
-
-The design of the docker images is that the ILIAS source code and maybe plugins/skins are maintained separate from this
-
-You need manually clone ILIAS with the follow command (Adjust version number)
-
-```shell
-git clone -b release_%version% https://github.com/ILIAS-eLearning/ILIAS ilias
+FROM docker-registry.fluxpublisher.ch/flux-ilias/nginx-base:latest AS nginx
+COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
 ```
 
-And if needed manually clone some plugins or skins to `ilias/Customizing/...`
+Currently, the follow versions are supported:
 
-These docker images are supporting minimal ILIAS 6, older versions will not work
+- ILIAS 6 or newer
+- PHP 7.4, 7.3 and 7.2 (8.0 is available only for development purposes)
+- Both Composer 1 and Composer 2 are available
 
-You can start/update the containers with the follow command
-
-```shell
-docker-compose pull && docker-compose up -d
-```
-
-You don't need to install composer dependencies of ILIAS, because the ilias container will do automatic this
-
-Also the install/update/migrate setup cli is auto be called in the ilias container
-
-You can watch that process with
+You can build your custom images with
 
 ```shell
-docker-compose logs -f
+docker build . --pull --target ilias -t %image%/ilias:latest
+docker build . --pull --target nginx -t %image%/nginx:latest
 ```
 
-After some minutes (Depending on first run or state of database) you can access the installation according port forwarding configuration in `docker-compose.yml` on your web browser
+Create a `docker-compose.yml` for run the containers
 
-If ILIAS is not init yet, the cron, ilserver and chatroom containers will exit, you need to restart it manually after that (May you should temporarily remove `restart:always` to avoid endless restart loop)
+*You need to adjust placeholders (Applies everywhere)*
 
-The example `docker-compose.yml` store the ilias data in a `data` folder on your working directory
+```yaml
+version: "3.6"
+services:
+  mysql:
+    environment:
+      - MYSQL_ROOT_PASSWORD=...
+      - MYSQL_PASSWORD=...
+    image: docker-registry.fluxpublisher.ch/flux-ilias/mysql:5.7
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+  ilias:
+    depends_on:
+      - mysql
+    environment:
+      - ILIAS_DATABASE_PASSWORD=...
+      - ILIAS_HTTP_PATH=http[s]://%host%
+      - ILIAS_ROOT_USER_PASSWORD=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
+      - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
+    image: %image%/ilias:latest
+    volumes:
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/ilias:/var/log/ilias
+  nginx:
+    depends_on:
+      - ilias
+    image: %image%/nginx:latest
+    ports:
+      - [%host_ip%:]80:80
+    volumes:
+      - ./data/ilias/web:/var/iliasdata/web
+```
 
-Here a brief overview of the folder structure of the default configuration
+## cron
 
-- docker-compose.yml
-- ilias > Mounted to `/var/www/html` inside most containers
-    - data > Symlink to `/var/iliasdata/web` (Only works inside container)
-    - ilias.ini.php > Symlink to `/var/iliasdata/ilias.ini.php` (Only works inside container)
-    - index.php
-    - ilias.php
-    - Customizing
-      - ...
-    - ...
-- data
-    - mysql > Mounted to `/var/lib/mysql` inside mysql container
-    - ilias > Mounted to `/var/iliasdata` inside most containers
-      - config.json > (Re)generated config for ILIAS setup cli
-      - ilias.ini.php
-      - default
-        - chatroom
-          - server.cfg
-          - client.cfg
-          - ...
-        - ...
-      - web
-        - default
-            - client.ini.php
-            - ...
-      - ilserver.properties
-      - ilserver
-        - default_0
-            - ...
-      - ...
-    - log
-      - mysql > Mounted to `/var/log/mysql` inside mysql container
-        - error.log
-      - ilias > Mounted to `/var/log/ilias` inside ilias and cron containers
-        - ilias.log
-        - errors (prod only)
-        - cron.log
-      - nginx > Mounted to `/var/log/nginx` inside nginx container
-        - access.log
-        - error.log
-      - ilserver > Mounted to `/var/log/ilserver` inside ilserver container
-        - ilserver.log
-      - chatroom > Mounted to `/var/log/chatroom` inside chatroom container
-        - chatroom.log
-        - error.log
-      - xdebug > Mounted to `/var/log/xdebug` inside ilias and cron containers (dev only)
-        - xdebug.log
-        - output
-    - certs > Mounted to `/certs` inside ilias and chatroom containers (prod only)
-        - ilias.cert
-        - ilias.key
-        - ilias.pem
-
-You can find more information (For example possible environment variables) in the corresponding readme in the [images folder](images)
-
-To remove the containers, you can use the follow command
+```dockerfile
+FROM docker-registry.fluxpublisher.ch/flux-ilias/cron-base:php7.4 AS cron
+COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+```
 
 ```shell
-docker-compose down --remove-orphans
+docker build . --pull --target cron -t %image%/cron:latest
 ```
 
-If you wish a fresh installation you can complete remove the data with the follow command
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_CRON_USER_PASSWORD=...
+  cron:
+    depends_on:
+      - ilias
+    environment:
+      - ILIAS_CRON_USER_PASSWORD=...
+    image: %image%/cron:latest
+    volumes:
+      - ./data/ilias:/var/iliasdata
+      - ./data/log/ilias:/var/log/ilias
+```
+
+## ilserver (Lucene search)
+
+```dockerfile
+FROM docker-registry.fluxpublisher.ch/flux-ilias/ilserver-base:java8 AS ilserver
+COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+```
 
 ```shell
-docker-compose down --remove-orphans && sudo rm -rf data && sudo unlink ilias/data && sudo unlink ilias/ilias.ini.php
+docker build . --pull --target ilserver -t %image%/ilserver:latest
 ```
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_LUEANCE_SEARCH=true
+  ilserver:
+    depends_on:
+      - ilias
+    image: %image%/ilserver:latest
+    volumes:
+      - ./data/ilias:/var/iliasdata
+```
+
+## chatroom
+
+```dockerfile
+FROM docker-registry.fluxpublisher.ch/flux-ilias/chatroom-base:nodejs10 AS chatroom
+COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+```
+
+```shell
+docker build . --pull --target chatroom -t %image%/chatroom:latest
+```
+
+```yaml
+services:
+  chatroom:
+    depends_on:
+      - ilias
+    image: %image%/chatroom:latest
+    ports:
+      - [%host_ip%:]8080:8080
+    volumes:
+      - ./data/ilias:/var/iliasdata
+```
+
+## Autostart
+
+*Note some containers needs that `ilias` is already init before start it (If it isn't the case, you may end in endless restarts of the containers)*
+
+```yaml
+services:
+  mysql:
+    restart: always
+  ilias:
+    restart: always
+  nginx:
+    restart: always
+  [cron:
+    restart: always]
+  [ilserver:
+    restart: always]
+  [chatroom:
+    restart: always]
+```
+
+## HTTPS
+
+If you don't use a proxy server, you can directly enable HTTPS on the containers with the follow config like
+
+```yaml
+services:
+  nginx:
+    environment:
+      - ILIAS_NGINX_HTTPS_CERT=/certs/ilias.crt
+      - ILIAS_NGINX_HTTPS_KEY=/certs/ilias.key
+      [- ILIAS_NGINX_HTTPS_DHPARAM=/certs/ilias.pem]
+    ports:
+      - [%host_ip%:]443:443
+    volumes:
+      - ./data/certs:/certs:ro
+```
+
+*Redirect HTTP to HTTPS is supported*
+
+### chatroom
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_CHATROOM_HTTPS_CERT=/certs/ilias.crt
+      - ILIAS_CHATROOM_HTTPS_KEY=/certs/ilias.key
+      - ILIAS_CHATROOM_HTTPS_DHPARAM=/certs/ilias.pem
+  chatroom:
+    volumes:
+      - ./data/certs:/certs:ro
+```
+
+## SMTP
+
+Currently, for send emails only an external smtp server is supported
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_SMTP_HOST=...
+      - ILIAS_SMTP_PORT=465
+      - ILIAS_SMTP_ENCRYPTION=tls
+      - ILIAS_SMPT_USER=...
+      - ILIAS_SMTP_PASSWORD=...
+```
+
+## Development
+
+### ILIAS development mode
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_DEVMODE=true
+```
+
+### PHP error reporting
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_PHP_DISPLAY_ERRORS=On
+```
+
+### Source code
+
+If you wish to live apply code changes, you can mount the source code as a volume in the containers
+
+```yaml
+services:
+  ilias:
+    volumes:
+      - ./ilias:/var/www/html
+  nginx:
+    volumes:
+      - ./ilias:/var/www/html
+  [cron:
+    volumes:
+      - ./ilias:/var/www/html]
+  [ilserver:
+    volumes:
+      - ./ilias:/var/www/html]
+  [chatroom:
+    volumes:
+      - ./ilias:/var/www/html]
+```
+
+As base, you can copy the source code from your `ilias` image to your host
+
+```shell
+docker run --rm --user $(id -u):$(id -g) -v "$PWD":/tmp/host_data --entrypoint cp %image%/ilias:latest -r /var/www/html /tmp/host_data/ilias
+```
+
+May you need to update the ILIAS core composer dependencies, but if you don't wish to use composer on your host, you can use the follow config to automatic to this on the container (re)creation
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_WEB_DIR_COMPOSER_AUTO_INSTALL=true
+```
+
+### SMTP
+
+You can use a development SMTP server with the follow config
+
+```yaml
+services:
+  ilias:
+    environment:
+      - ILIAS_SMTP_HOST=smtp
+      - ILIAS_SMTP_PORT=1025
+  smtp:
+    image: mailhog/mailhog:latest
+    ports:
+      - [%host_ip%:]8025:8025
+```
+
+### Xdebug
+
+Not supported
+
+## More
+
+You can find more information (For example possible environment variables) in the corresponding readme per image in the [images folder](images)

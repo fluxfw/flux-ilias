@@ -25,13 +25,14 @@ ensureDataDirectories () {
   chown -h "$_ILIAS_WWW_DATA" "$_ILIAS_WEB_PHP_FILE"
 }
 
-if [ -f "$_ILIAS_AUTO_SKIP_CONFIG_TEMP_FILE" ]; then
+auto_skip_config_temp_file=/tmp/auto_skip_config_temp_file
+if [ -f "$auto_skip_config_temp_file" ]; then
   echo "Auto skip config (This is not a new container (re)creation)"
 else
   echo "Run config"
 
   if [ ! -f "$ILIAS_WEB_DIR/ilias.php" ]; then
-    echo "Please init ILIAS source code and add a volume to $ILIAS_WEB_DIR"
+    echo "Please provide ILIAS source code to $ILIAS_WEB_DIR (\$ILIAS_WEB_DIR)"
     exit 1
   fi
 
@@ -87,7 +88,7 @@ memory_limit = $ILIAS_PHP_MEMORY_LIMIT
 post_max_size = $ILIAS_PHP_POST_MAX_SIZE
 upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.ini"
 
-  if [ "$_ILIAS_COMPOSER_AUTO_INSTALL" = "true" ] && [ -f "$ILIAS_WEB_DIR/composer.json" ]; then
+  if [ "$ILIAS_WEB_DIR_COMPOSER_AUTO_INSTALL" = "true" ] && [ -f "$ILIAS_WEB_DIR/composer.json" ]; then
     echo "Install composer dependencies"
 
     if [ ! -d "$ILIAS_WEB_DIR/setup/templates" ]; then
@@ -173,7 +174,7 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
     echo "Further config may will fail"
   fi
 
-  if [ "$ILIAS_DEVMODE" = "true" ] || [ "$ILIAS_DEVMODE" = "1" ]; then
+  if [ "$ILIAS_DEVMODE" = "true" ]; then
     echo "Enable ILIAS development mode"
     $_ILIAS_EXEC_AS_WWW_DATA /FluxIlias/bin/set_client_ilias_setting.php system DEVMODE 1
   else
@@ -213,7 +214,7 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
     $_ILIAS_EXEC_AS_WWW_DATA /FluxIlias/bin/set_ilias_chatroom_setting.php client_url "$ILIAS_CHATROOM_CLIENT_PROXY_CLIENT_URL"
   fi
 
-  if [ "$ILIAS_LUEANCE_SEARCH" = "true" ] || [ "$ILIAS_LUEANCE_SEARCH" = "1" ]; then
+  if [ "$ILIAS_LUEANCE_SEARCH" = "true" ]; then
     echo "Enable lucene search"
     $_ILIAS_EXEC_AS_WWW_DATA /FluxIlias/bin/set_ilias_general_setting.php common search_lucene 1
     $_ILIAS_EXEC_AS_WWW_DATA /FluxIlias/bin/enable_or_disable_ilias_cron_job.php src_lucene_indexer 1
@@ -237,7 +238,7 @@ upload_max_filesize = $ILIAS_PHP_UPLOAD_MAX_SIZE" > "$PHP_INI_DIR/conf.d/ilias.i
 
   echo "Config finished"
   echo "Skip it until a new container (re)creation"
-  touch "$_ILIAS_AUTO_SKIP_CONFIG_TEMP_FILE"
+  touch "$auto_skip_config_temp_file"
 fi
 
 echo "Unset ILIAS env variables (For not show in PHP variables or log files)"

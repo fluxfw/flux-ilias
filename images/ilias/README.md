@@ -1,20 +1,14 @@
-# ILIAS php-fpm image
+# ILIAS image (php-fpm)
 
-The follow PHP versions are available
-
-- 7.2
-- 7.3
-- 7.4
-- 8.0 (For development purposes only, ILIAS doesn't support yet)
-
-The php config and the setup config is automatic generated based set the follow environment variables
+The follow environment variables are available
 
 | Variable | Description | Default value |
 | -------- | ----------- | ------------- |
 | ILIAS_FILESYSTEM_DATA_DIR | Path to data directory<br>This is a volume | /var/iliasdata |
 | ILIAS_FILESYSTEM_INI_PHP_FILE | Path to ILIAS ini file | *%ILIAS_FILESYSTEM_DATA_DIR%*/ilias.ini.php |
 | ILIAS_LOG_DIR | Path to ILIAS log directory<br>This is a volume | /var/log/ilias |
-| ILIAS_WEB_DIR | Path to ILIAS source code<br>This is a volume | /var/www/html |
+| ILIAS_WEB_DIR | Path to ILIAS source code | /var/www/html |
+| ILIAS_WEB_DIR_COMPOSER_AUTO_INSTALL | Auto install Ilias core composer dependencies<br>Only use if ILIAS source code is on a volume and composer is not used on host | false |
 | ILIAS_CONFIG_FILE | Path to setup config file | *%ILIAS_FILESYSTEM_DATA_DIR%*/config.json |
 | ILIAS_FILESYSTEM_WEB_DATA_DIR | Path to web data directory | *%ILIAS_FILESYSTEM_DATA_DIR%*/web |
 | ILIAS_PHP_DISPLAY_ERRORS | Directly display PHP errors | Off |
@@ -100,10 +94,9 @@ The php config and the setup config is automatic generated based set the follow 
 | ILIAS_CHATROOM_HTTPS_CERT | Path to HTTPS certificate file<br>Set this will enable listen on HTTPS<br>Should be on a volume | *-* |
 | ILIAS_CHATROOM_HTTPS_KEY | Path to HTTPS key file<br>Should be on a volume | *-* |
 | ILIAS_CHATROOM_HTTPS_DHPARAM | Path to HTTPS pem file<br>Should be on a volume | *-* |
-| ILIAS_CHATROOM_LOG_DIR | Path to log directory<br>This is a volume | /var/log/chatroom |
-| ILIAS_CHATROOM_LOG | Path to log file | *%ILIAS_CHATROOM_LOG_DIR%*/chatroom.log |
+| ILIAS_CHATROOM_LOG | Path to log file | /dev/stdout |
 | ILIAS_CHATROOM_LOG_LEVEL | Log level | info |
-| ILIAS_CHATROOM_ERROR_LOG | Path to error log file | *%ILIAS_CHATROOM_LOG_DIR%*/error.log |
+| ILIAS_CHATROOM_ERROR_LOG | Path to error log file | /dev/stderr |
 | ILIAS_CHATROOM_ILIAS_PROXY_ILIAS_URL | Url ILIAS can access chatroom server | http*s*://chatroom:*%ILIAS_CHATROOM_PORT%* |
 | ILIAS_CHATROOM_CLIENT_PROXY_CLIENT_URL | Url client browser can access chatroom server | *%ILIAS_HTTP_PATH%*:*%ILIAS_CHATROOM_PORT%* |
 | ILIAS_CHATROOM_DELETION_INTERVAL_DELETION_UNIT | Deletion interval unit | *-* |
