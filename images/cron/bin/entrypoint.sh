@@ -10,7 +10,7 @@ else
 fi
 
 echo "Generate cron config"
-echo "$ILIAS_CRON_PERIOD $_ILIAS_EXEC_AS_WWW_DATA $(which php) $ILIAS_WEB_DIR/cron/cron.php \"$ILIAS_CRON_USER_LOGIN\" \"$ILIAS_CRON_USER_PASSWORD\" \"$ILIAS_COMMON_CLIENT_ID\" >> \"$ILIAS_CRON_LOG_FILE\" 2>&1" > "$ILIAS_CRON_FILE"
+echo "$ILIAS_CRON_PERIOD $_ILIAS_EXEC_AS_WWW_DATA $(which php) $ILIAS_WEB_DIR/cron/cron.php \"$ILIAS_CRON_USER_LOGIN\" \"$ILIAS_CRON_USER_PASSWORD\" \"$ILIAS_COMMON_CLIENT_ID\"" > "$ILIAS_CRON_FILE"
 crontab "$ILIAS_CRON_FILE"
 
 echo "Unset ILIAS env variables (For not show in PHP variables or log files)"

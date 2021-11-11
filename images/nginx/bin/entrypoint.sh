@@ -3,7 +3,7 @@
 set -e
 
 if [ ! -f "$ILIAS_WEB_DIR/ilias.php" ]; then
-  echo "Please init ILIAS source code and add a volume to $ILIAS_WEB_DIR"
+  echo "Please provide ILIAS source code to $ILIAS_WEB_DIR (\$ILIAS_WEB_DIR)"
   exit 1
 fi
 
@@ -33,8 +33,6 @@ else
   listen="listen $ILIAS_NGINX_LISTEN:$ILIAS_NGINX_HTTP_PORT;"
 fi
 echo "server_tokens $ILIAS_NGINX_SERVER_TOKENS;
-access_log $ILIAS_NGINX_ACCESS_LOG_FILE $ILIAS_NGINX_ACCESS_LOG_LEVEL;
-error_log $ILIAS_NGINX_ERROR_LOG_FILE $ILIAS_NGINX_ERROR_LOG_LEVEL;
 server {
 	$listen
 
@@ -55,8 +53,6 @@ server {
 
 	include /FluxIliasNginx/src/rewrites.conf;
 }" > /etc/nginx/conf.d/ilias.conf
-
-mkdir -p "$ILIAS_NGINX_LOG_DIR"
 
 echo "Unset ILIAS env variables (For not show in PHP variables or log files)"
 for var in $(printenv | grep "ILIAS_" | sed 's/=.*$//'); do

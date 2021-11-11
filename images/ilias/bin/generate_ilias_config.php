@@ -34,7 +34,7 @@ function config(array $template_config, array $config, string $parent_key) : ?ar
                     "ILIAS_WEBSERVICES_SOAP_USER_ADMINISTRATION"
                 ])
                 ) {
-                    $env_value = in_array($env_value, ["true", "1"]);
+                    $env_value = $env_value === "true";
                 }
 
                 $config[$current_key] = $env_value;

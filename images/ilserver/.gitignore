@@ -1,6 +1,6 @@
 *
-!base
-!base/**
+!bin
+!bin/**
 !.dockerignore
 !.gitignore
 !Dockerfile
