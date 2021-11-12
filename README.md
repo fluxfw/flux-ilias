@@ -13,7 +13,7 @@ Experimental Beta Version
   - Set/override root user password
   - Create cron user / Override cron user password
   - Enable/disable ILIAS development mode
-  - Enable/disable lucene search and lucene index cron job
+  - Enable/disable lueance search and lueance index cron job
   - Set smtp server
 - The external `data` directory and `ilias.ini.php` are symlinks to the internal `data` directory to combine both in one
 
@@ -34,7 +34,7 @@ FROM docker-registry.fluxpublisher.ch/flux-ilias/nginx-base:latest AS nginx
 COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
 ```
 
-Currently, the follow versions are supported:
+Currently, the follow versions are supported
 
 - ILIAS 6 or newer
 - PHP 7.4, 7.3 and 7.2 (8.0 is available only for development purposes)
@@ -112,7 +112,7 @@ services:
       - ./data/log/ilias:/var/log/ilias
 ```
 
-## ilserver (Lucene search)
+## ilserver (Lueance search)
 
 ```dockerfile
 FROM docker-registry.fluxpublisher.ch/flux-ilias/ilserver-base:java8 AS ilserver
@@ -307,4 +307,11 @@ Not supported
 
 ## More
 
-You can find more information (For example possible environment variables) in the corresponding readme per image in the [images folder](images)
+You can find more information per image in
+
+- [FluxIliasMysql](https://github.com/fluxapps/FluxIliasMysql)
+- [FluxIliasBase](https://github.com/fluxapps/FluxIliasBase)
+- [FluxIliasNginxBase](https://github.com/fluxapps/FluxIliasNginxBase)
+- [FluxIliasCronBase](https://github.com/fluxapps/FluxIliasCronBase)
+- [FluxIliasIlserverBase](https://github.com/fluxapps/FluxIliasIlserverBase)
+- [FluxIliasChatroomBase](https://github.com/fluxapps/FluxIliasChatroomBase)
