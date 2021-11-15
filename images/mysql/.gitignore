@@ -1,7 +1,0 @@
-*
-!bin
-!bin/**
-!.dockerignore
-!.gitignore
-!Dockerfile
-!README.md

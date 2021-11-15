@@ -11,8 +11,11 @@
     "fpm",
     "ilias",
     "ilserver",
+    "java",
+    "lueance",
     "mysql",
     "nginx",
+    "nodejs",
     "php"
   ],
   "homepage": "https://github.com/fluxapps/FluxIlias"

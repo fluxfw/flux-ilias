@@ -1,6 +1,4 @@
 *
-!images
-!images/**
 !.gitignore
 !.gitlab-ci.yml
 !metadata.json
