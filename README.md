@@ -13,7 +13,7 @@ Experimental Beta Version
   - Set/override root user password
   - Create cron user / Override cron user password
   - Enable/disable ILIAS development mode
-  - Enable/disable lueance search and lueance index cron job
+  - Enable/disable lucene search and lucene index cron job
   - Set smtp server
 - The external `data` directory and `ilias.ini.php` are symlinks to the internal `data` directory to combine both in one
 
@@ -112,7 +112,7 @@ services:
       - ./data/log/ilias:/var/log/ilias
 ```
 
-## ilserver (Lueance search)
+## ilserver (Lucene search)
 
 ```dockerfile
 FROM docker-registry.fluxpublisher.ch/flux-ilias/ilserver-base:java8 AS ilserver
@@ -127,7 +127,7 @@ docker build . --pull --target ilserver -t %image%/ilserver:latest
 services:
   ilias:
     environment:
-      - ILIAS_LUEANCE_SEARCH=true
+      - ILIAS_LUCENE_SEARCH=true
   ilserver:
     depends_on:
       - ilias
