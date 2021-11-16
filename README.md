@@ -1,4 +1,4 @@
-# FluxIlias
+# flux-ilias
 
 Experimental Beta Version
 
@@ -309,9 +309,9 @@ Not supported
 
 You can find more information per image in
 
-- [FluxIliasMysql](https://github.com/fluxapps/FluxIliasMysql)
-- [FluxIliasBase](https://github.com/fluxapps/FluxIliasBase)
-- [FluxIliasNginxBase](https://github.com/fluxapps/FluxIliasNginxBase)
-- [FluxIliasCronBase](https://github.com/fluxapps/FluxIliasCronBase)
-- [FluxIliasIlserverBase](https://github.com/fluxapps/FluxIliasIlserverBase)
-- [FluxIliasChatroomBase](https://github.com/fluxapps/FluxIliasChatroomBase)
+- [flux-ilias-mysql](https://github.com/fluxapps/flux-ilias-mysql)
+- [flux-ilias-ilias-base](https://github.com/fluxapps/flux-ilias-ilias-base)
+- [flux-ilias-nginx-base](https://github.com/fluxapps/flux-ilias-nginx-base)
+- [flux-ilias-cron-base](https://github.com/fluxapps/flux-ilias-cron-base)
+- [flux-ilias-ilserver-base](https://github.com/fluxapps/flux-ilias-ilserver-base)
+- [flux-ilias-chatroom-base](https://github.com/fluxapps/flux-ilias-chatroom-base)
