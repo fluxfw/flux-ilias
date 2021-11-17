@@ -4,6 +4,7 @@
     "alpine",
     "base",
     "beta",
+    "chat",
     "chatroom",
     "cron",
     "docker",
@@ -15,6 +16,7 @@
     "lucene",
     "mysql",
     "nginx",
+    "node",
     "nodejs",
     "php"
   ],
