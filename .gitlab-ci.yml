@@ -1,6 +1,6 @@
 flux-publish-utils:
   stage: build
-  image: docker-registry.fluxpublisher.ch/flux-publish-utils:latest
+  image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/flux-publish-utils:latest
   script:
     - "false"
   only:

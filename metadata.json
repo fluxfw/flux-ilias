@@ -1,6 +1,6 @@
 {
   "description": "ILIAS base docker images (Experimental Beta Version)",
-  "keywords": [
+  "topics": [
     "alpine",
     "base",
     "beta",
