@@ -4,7 +4,6 @@ Experimental Beta Version
 
 ## Notes
 
-- You can directly use the official mysql image if you prefer (Or other database types which ILIAS supports (Currently, only mysql like are supported by this image)), but may it needs some addition config that ILIAS will work, which the ilias mysql contains
 - Even you use a proxy server you should use the ilias nginx image because it contains some dependencies which ILIAS needs (Like URL redirects or XAccel support)
 - The install/update/migrate setup cli is auto be called on container (re)creation
   - The config json is automatic generated
@@ -17,7 +16,7 @@ Experimental Beta Version
   - Set smtp server
 - The external `data` directory and `ilias.ini.php` are symlinks to the internal `data` directory to combine both in one
 
-## mysql, ilias and nginx
+## database, ilias and nginx
 
 Extends the basic images in a custom `Dockerfile` and copy the ILIAS source code and install composer dependencies
 
@@ -54,16 +53,19 @@ Create a `docker-compose.yml` for run the containers
 ```yaml
 version: "3.6"
 services:
-  mysql:
+  database:
+    command: --character-set-server=utf8 --collation-server=utf8_general_ci
     environment:
-      - MYSQL_ROOT_PASSWORD=...
-      - MYSQL_PASSWORD=...
-    image: docker-registry.fluxpublisher.ch/flux-ilias/mysql:5.7
+      - MARIADB_DATABASE=ilias
+      - MARIADB_PASSWORD=...
+      - MARIADB_ROOT_PASSWORD=...
+      - MARIADB_USER=ilias
+    image: mariadb:latest
     volumes:
       - ./data/mysql:/var/lib/mysql
   ilias:
     depends_on:
-      - mysql
+      - database
     environment:
       - ILIAS_DATABASE_PASSWORD=...
       - ILIAS_HTTP_PATH=http[s]://%host%
@@ -165,7 +167,7 @@ services:
 
 ```yaml
 services:
-  mysql:
+  database:
     restart: always
   ilias:
     restart: always
@@ -309,7 +311,6 @@ Not supported
 
 You can find more information per image in
 
-- [flux-ilias-mysql](https://github.com/fluxapps/flux-ilias-mysql)
 - [flux-ilias-ilias-base](https://github.com/fluxapps/flux-ilias-ilias-base)
 - [flux-ilias-nginx-base](https://github.com/fluxapps/flux-ilias-nginx-base)
 - [flux-ilias-cron-base](https://github.com/fluxapps/flux-ilias-cron-base)

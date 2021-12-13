@@ -14,7 +14,7 @@
     "ilserver",
     "java",
     "lucene",
-    "mysql",
+    "mariadb",
     "nginx",
     "node",
     "nodejs",
