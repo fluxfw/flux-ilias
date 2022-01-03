@@ -48,7 +48,7 @@ docker build . --pull --target nginx -t %image%/nginx:latest
 
 Create a `docker-compose.yml` for run the containers
 
-*You need to adjust placeholders (Applies everywhere)*
+*You need to adjust placeholders and create secret files (Applies everywhere)*
 
 ```yaml
 version: "3.6"
@@ -57,23 +57,29 @@ services:
     command: --character-set-server=utf8 --collation-server=utf8_general_ci
     environment:
       - MARIADB_DATABASE=ilias
-      - MARIADB_PASSWORD=...
-      - MARIADB_ROOT_PASSWORD=...
+      - MARIADB_PASSWORD_FILE=/run/secrets/database_ilias_password
+      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/database_root_password
       - MARIADB_USER=ilias
     image: mariadb:latest
+    secrets:
+      - database_ilias_password
+      - database_root_password
     volumes:
       - ./data/mysql:/var/lib/mysql
   ilias:
     depends_on:
       - database
     environment:
-      - ILIAS_DATABASE_PASSWORD=...
+      - ILIAS_DATABASE_PASSWORD_FILE=/run/secrets/database_ilias_password
       - ILIAS_HTTP_PATH=http[s]://%host%
-      - ILIAS_ROOT_USER_PASSWORD=...
+      - ILIAS_ROOT_USER_PASSWORD_FILE=/run/secrets/ilias_root_password
       - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
       - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
     image: %image%/ilias:latest
+    secrets:
+      - database_ilias_password
+      - ilias_root_password
     volumes:
       - ./data/ilias:/var/iliasdata
       - ./data/log/ilias:/var/log/ilias
@@ -85,6 +91,13 @@ services:
       - [%host_ip%:]80:80
     volumes:
       - ./data/ilias/web:/var/iliasdata/web
+secrets:
+  database_ilias_password:
+    file: ./data/database_ilias_password
+  database_root_password:
+    file: ./data/database_root_password
+  ilias_root_password:
+    file: ./data/ilias_root_password
 ```
 
 ## cron
@@ -102,16 +115,23 @@ docker build . --pull --target cron -t %image%/cron:latest
 services:
   ilias:
     environment:
-      - ILIAS_CRON_USER_PASSWORD=...
+      - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
+    secrets:
+      - ilias_cron_password
   cron:
     depends_on:
       - ilias
     environment:
-      - ILIAS_CRON_USER_PASSWORD=...
+      - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
     image: %image%/cron:latest
+    secrets:
+      - ilias_cron_password
     volumes:
       - ./data/ilias:/var/iliasdata
       - ./data/log/ilias:/var/log/ilias
+secrets:
+  ilias_cron_password:
+    file: ./data/ilias_cron_password
 ```
 
 ## ilserver (Lucene search)
@@ -189,13 +209,22 @@ If you don't use a proxy server, you can directly enable HTTPS on the containers
 services:
   nginx:
     environment:
-      - ILIAS_NGINX_HTTPS_CERT=/certs/ilias.crt
-      - ILIAS_NGINX_HTTPS_KEY=/certs/ilias.key
-      [- ILIAS_NGINX_HTTPS_DHPARAM=/certs/ilias.pem]
+      - ILIAS_NGINX_HTTPS_CERT=/run/secrets/https_cert
+      - ILIAS_NGINX_HTTPS_KEY=/run/secrets/https_key
+      [- ILIAS_NGINX_HTTPS_DHPARAM=/run/secrets/https_pem]
     ports:
       - [%host_ip%:]443:443
-    volumes:
-      - ./data/certs:/certs:ro
+    secrets:
+      - https_cert
+      - https_key
+      [- https_pem]
+secrets:
+  https_cert:
+    file: ./data/certs/ilias.crt
+  https_key:
+    file: ./data/certs/ilias.key
+  [https_pem:
+    file: ./data/certs/ilias.pem]
 ```
 
 *Redirect HTTP to HTTPS is supported*
@@ -206,12 +235,14 @@ services:
 services:
   ilias:
     environment:
-      - ILIAS_CHATROOM_HTTPS_CERT=/certs/ilias.crt
-      - ILIAS_CHATROOM_HTTPS_KEY=/certs/ilias.key
-      - ILIAS_CHATROOM_HTTPS_DHPARAM=/certs/ilias.pem
+      - ILIAS_CHATROOM_HTTPS_CERT=/run/secrets/https_cert
+      - ILIAS_CHATROOM_HTTPS_KEY=/run/secrets/https_key
+      - ILIAS_CHATROOM_HTTPS_DHPARAM=/run/secrets/https_pem
   chatroom:
-    volumes:
-      - ./data/certs:/certs:ro
+    secrets:
+      - https_cert
+      - https_key
+      - https_pem
 ```
 
 ## SMTP
@@ -225,8 +256,16 @@ services:
       - ILIAS_SMTP_HOST=...
       - ILIAS_SMTP_PORT=465
       - ILIAS_SMTP_ENCRYPTION=tls
-      - ILIAS_SMPT_USER=...
-      - ILIAS_SMTP_PASSWORD=...
+      - ILIAS_SMPT_USER_FILE=/run/secrets/ilias_smtp_user
+      - ILIAS_SMTP_PASSWORD_FILE=/run/secrets/ilias_smtp_password
+    secret:
+      - ilias_smtp_user
+      - ilias_smtp_password
+secrets:
+  ilias_smtp_user:
+    file: ./data/ilias_smtp_user
+  ilias_smtp_password:
+    file: ./data/ilias_smtp_password
 ```
 
 ## Development
