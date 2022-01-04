@@ -93,11 +93,11 @@ services:
       - ./data/ilias/web:/var/iliasdata/web
 secrets:
   database_ilias_password:
-    file: ./data/database_ilias_password
+    file: ./data/secrets/database_ilias_password
   database_root_password:
-    file: ./data/database_root_password
+    file: ./data/secrets/database_root_password
   ilias_root_password:
-    file: ./data/ilias_root_password
+    file: ./data/secrets/ilias_root_password
 ```
 
 ## cron
@@ -131,7 +131,7 @@ services:
       - ./data/log/ilias:/var/log/ilias
 secrets:
   ilias_cron_password:
-    file: ./data/ilias_cron_password
+    file: ./data/secrets/ilias_cron_password
 ```
 
 ## ilserver (Lucene search)
@@ -263,9 +263,9 @@ services:
       - ilias_smtp_password
 secrets:
   ilias_smtp_user:
-    file: ./data/ilias_smtp_user
+    file: ./data/secrets/ilias_smtp_user
   ilias_smtp_password:
-    file: ./data/ilias_smtp_password
+    file: ./data/secrets/ilias_smtp_password
 ```
 
 ## Development
