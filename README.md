@@ -155,7 +155,8 @@ services:
       - ilias
     image: %image%/ilserver:latest
     volumes:
-      - ./data/ilias:/var/iliasdata
+      - ./data/ilserver:/var/ilserverdata
+      - ./data/ilias:/var/iliasdata:ro
 ```
 
 ## chatroom
@@ -178,7 +179,7 @@ services:
     ports:
       - [%host_ip%:]8080:8080
     volumes:
-      - ./data/ilias:/var/iliasdata
+      - ./data/ilias:/var/iliasdata:ro
 ```
 
 ## Autostart
@@ -305,10 +306,10 @@ services:
       - ./ilias:/var/www/html]
   [ilserver:
     volumes:
-      - ./ilias:/var/www/html]
+      - ./ilias:/var/www/html:ro]
   [chatroom:
     volumes:
-      - ./ilias:/var/www/html]
+      - ./ilias:/var/www/html:ro]
 ```
 
 As base, you can copy the source code from your `ilias` image to your host
