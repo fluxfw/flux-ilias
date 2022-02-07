@@ -90,7 +90,7 @@ services:
     ports:
       - [%host_ip%:]80:80
     volumes:
-      - ./data/ilias/web:/var/iliasdata/web
+      - ./data/ilias/web:/var/iliasdata/web:ro
 secrets:
   database_ilias_password:
     file: ./data/secrets/database_ilias_password
@@ -300,10 +300,10 @@ services:
       - ./ilias:/var/www/html
   nginx:
     volumes:
-      - ./ilias:/var/www/html
+      - ./ilias:/var/www/html:ro
   [cron:
     volumes:
-      - ./ilias:/var/www/html]
+      - ./ilias:/var/www/html:ro]
   [ilserver:
     volumes:
       - ./ilias:/var/www/html:ro]
