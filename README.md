@@ -25,7 +25,7 @@ You may wish to copy other things like plugins or skins or apply some patches
 ```dockerfile
 FROM docker-registry.fluxpublisher.ch/flux-ilias/ilias-base:php7.4 AS ilias
 
-RUN (cd $ILIAS_WEB_DIR && wget -O - https://github.com/ILIAS-eLearning/ILIAS/archive/release_7.tar.gz | tar -xz --strip-components=1 && composer2 install --no-dev) && \
+RUN (cd $ILIAS_WEB_DIR && wget -O - https://github.com/ILIAS-eLearning/ILIAS/archive/release_7.tar.gz | tar -xz --strip-components=1 && composer install --no-dev) && \
     (mkdir -p $ILIAS_WEB_DIR/Customizing/global/plugins/Services/X/Y/Z && cd $ILIAS_WEB_DIR/Customizing/global/plugins/Services/X/Y/Z && wget -O - https://github.com/x/y/archive/z.tar.gz | tar -xz --strip-components=1) && \
     ...
 
