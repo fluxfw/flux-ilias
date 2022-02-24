@@ -315,7 +315,7 @@ services:
 As base, you can copy the source code from your `ilias` image to your host
 
 ```shell
-docker run --rm --user $(id -u):$(id -g) -v "$PWD":/tmp/host_data --entrypoint cp %image%/ilias:latest -r /var/www/html /tmp/host_data/ilias
+docker run --rm -it -u `id -u`:`id -g` -v "$PWD":/tmp/host_data --entrypoint cp %image%/ilias:latest -r /var/www/html /tmp/host_data/ilias
 ```
 
 May you need to update the ILIAS core composer dependencies, but if you don't wish to use composer on your host, you can use the follow config to automatic to this on the container (re)creation
