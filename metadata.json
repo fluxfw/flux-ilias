@@ -1,24 +1,22 @@
 {
-  "description": "ILIAS base docker images (Experimental Beta Version)",
-  "topics": [
-    "alpine",
-    "base",
-    "beta",
-    "chat",
-    "chatroom",
-    "cron",
-    "docker",
-    "experimental",
-    "fpm",
-    "ilias",
-    "ilserver",
-    "java",
-    "lucene",
-    "mariadb",
-    "nginx",
-    "node",
-    "nodejs",
-    "php"
-  ],
-  "homepage": "https://github.com/fluxapps/flux-ilias"
+    "description": "ILIAS base docker images",
+    "topics": [
+        "alpine",
+        "base",
+        "chat",
+        "chatroom",
+        "cron",
+        "docker",
+        "fpm",
+        "ilias",
+        "ilserver",
+        "java",
+        "lucene",
+        "mariadb",
+        "nginx",
+        "node",
+        "nodejs",
+        "php"
+    ],
+    "homepage": "https://github.com/fluxapps/flux-ilias"
 }
