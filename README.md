@@ -1,6 +1,6 @@
 # flux-ilias
 
-Experimental Beta Version
+ILIAS base docker images
 
 ## Notes
 
@@ -46,58 +46,58 @@ docker build . --pull --target ilias -t %image%/ilias:latest
 docker build . --pull --target nginx -t %image%/nginx:latest
 ```
 
-Create a `docker-compose.yml` for run the containers
+Create a `docker-compose.yaml` for run the containers
 
 *You need to adjust placeholders and create secret files (Applies everywhere)*
 
 ```yaml
 version: "3.6"
 services:
-  database:
-    command: --character-set-server=utf8 --collation-server=utf8_general_ci
-    environment:
-      - MARIADB_DATABASE=ilias
-      - MARIADB_PASSWORD_FILE=/run/secrets/database_ilias_password
-      - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/database_root_password
-      - MARIADB_USER=ilias
-    image: mariadb:latest
-    secrets:
-      - database_ilias_password
-      - database_root_password
-    volumes:
-      - ./data/mysql:/var/lib/mysql
-  ilias:
-    depends_on:
-      - database
-    environment:
-      - ILIAS_DATABASE_PASSWORD_FILE=/run/secrets/database_ilias_password
-      - ILIAS_HTTP_PATH=http[s]://%host%
-      - ILIAS_ROOT_USER_PASSWORD_FILE=/run/secrets/ilias_root_password
-      - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
-      - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
-      - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
-    image: %image%/ilias:latest
-    secrets:
-      - database_ilias_password
-      - ilias_root_password
-    volumes:
-      - ./data/ilias:/var/iliasdata
-      - ./data/log/ilias:/var/log/ilias
-  nginx:
-    depends_on:
-      - ilias
-    image: %image%/nginx:latest
-    ports:
-      - [%host_ip%:]80:80
-    volumes:
-      - ./data/ilias/web:/var/iliasdata/web:ro
+    database:
+        command: --character-set-server=utf8 --collation-server=utf8_general_ci
+        environment:
+            - MARIADB_DATABASE=ilias
+            - MARIADB_PASSWORD_FILE=/run/secrets/database_ilias_password
+            - MARIADB_ROOT_PASSWORD_FILE=/run/secrets/database_root_password
+            - MARIADB_USER=ilias
+        image: mariadb:latest
+        secrets:
+            - database_ilias_password
+            - database_root_password
+        volumes:
+            - ./data/mysql:/var/lib/mysql
+    ilias:
+        depends_on:
+            - database
+        environment:
+            - ILIAS_DATABASE_PASSWORD_FILE=/run/secrets/database_ilias_password
+            - ILIAS_HTTP_PATH=http[s]://%host%
+            - ILIAS_ROOT_USER_PASSWORD_FILE=/run/secrets/ilias_root_password
+            - ILIAS_SYSTEMFOLDER_CONTACT_FIRSTNAME=...
+            - ILIAS_SYSTEMFOLDER_CONTACT_LASTNAME=...
+            - ILIAS_SYSTEMFOLDER_CONTACT_EMAIL=...
+        image: %image%/ilias:latest
+        secrets:
+            - database_ilias_password
+            - ilias_root_password
+        volumes:
+            - ./data/ilias:/var/iliasdata
+            - ./data/log/ilias:/var/log/ilias
+    nginx:
+        depends_on:
+            - ilias
+        image: %image%/nginx:latest
+        ports:
+            - [%host_ip%:]80:80
+        volumes:
+            - ./data/ilias/web:/var/iliasdata/web:ro
 secrets:
-  database_ilias_password:
-    file: ./data/secrets/database_ilias_password
-  database_root_password:
-    file: ./data/secrets/database_root_password
-  ilias_root_password:
-    file: ./data/secrets/ilias_root_password
+    database_ilias_password:
+        file: ./data/secrets/database_ilias_password
+    database_root_password:
+        file: ./data/secrets/database_root_password
+    ilias_root_password:
+        file: ./data/secrets/ilias_root_password
 ```
 
 ## cron
@@ -113,25 +113,25 @@ docker build . --pull --target cron -t %image%/cron:latest
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
-    secrets:
-      - ilias_cron_password
-  cron:
-    depends_on:
-      - ilias
-    environment:
-      - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
-    image: %image%/cron:latest
-    secrets:
-      - ilias_cron_password
-    volumes:
-      - ./data/ilias:/var/iliasdata
-      - ./data/log/ilias:/var/log/ilias
+    ilias:
+        environment:
+            - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
+        secrets:
+            - ilias_cron_password
+    cron:
+        depends_on:
+            - ilias
+        environment:
+            - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
+        image: %image%/cron:latest
+        secrets:
+            - ilias_cron_password
+        volumes:
+            - ./data/ilias:/var/iliasdata
+            - ./data/log/ilias:/var/log/ilias
 secrets:
-  ilias_cron_password:
-    file: ./data/secrets/ilias_cron_password
+    ilias_cron_password:
+        file: ./data/secrets/ilias_cron_password
 ```
 
 ## ilserver (Lucene search)
@@ -147,16 +147,16 @@ docker build . --pull --target ilserver -t %image%/ilserver:latest
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_LUCENE_SEARCH=true
-  ilserver:
-    depends_on:
-      - ilias
-    image: %image%/ilserver:latest
-    volumes:
-      - ./data/ilserver:/var/ilserverdata
-      - ./data/ilias:/var/iliasdata:ro
+    ilias:
+        environment:
+            - ILIAS_LUCENE_SEARCH=true
+    ilserver:
+        depends_on:
+            - ilias
+        image: %image%/ilserver:latest
+        volumes:
+            - ./data/ilserver:/var/ilserverdata
+            - ./data/ilias:/var/iliasdata:ro
 ```
 
 ## chatroom
@@ -172,14 +172,14 @@ docker build . --pull --target chatroom -t %image%/chatroom:latest
 
 ```yaml
 services:
-  chatroom:
-    depends_on:
-      - ilias
-    image: %image%/chatroom:latest
-    ports:
-      - [%host_ip%:]8080:8080
-    volumes:
-      - ./data/ilias:/var/iliasdata:ro
+    chatroom:
+        depends_on:
+            - ilias
+        image: %image%/chatroom:latest
+        ports:
+            - [%host_ip%:]8080:8080
+        volumes:
+            - ./data/ilias:/var/iliasdata:ro
 ```
 
 ## Autostart
@@ -188,18 +188,18 @@ services:
 
 ```yaml
 services:
-  database:
-    restart: always
-  ilias:
-    restart: always
-  nginx:
-    restart: always
-  [cron:
-    restart: always]
-  [ilserver:
-    restart: always]
-  [chatroom:
-    restart: always]
+    database:
+        restart: always
+    ilias:
+        restart: always
+    nginx:
+        restart: always
+    [cron:
+        restart: always]
+    [ilserver:
+        restart: always]
+    [chatroom:
+        restart: always]
 ```
 
 ## HTTPS
@@ -208,24 +208,24 @@ If you don't use a proxy server, you can directly enable HTTPS on the containers
 
 ```yaml
 services:
-  nginx:
-    environment:
-      - ILIAS_NGINX_HTTPS_CERT=/run/secrets/https_cert
-      - ILIAS_NGINX_HTTPS_KEY=/run/secrets/https_key
-      [- ILIAS_NGINX_HTTPS_DHPARAM=/run/secrets/https_pem]
-    ports:
-      - [%host_ip%:]443:443
-    secrets:
-      - https_cert
-      - https_key
-      [- https_pem]
+    nginx:
+        environment:
+            - ILIAS_NGINX_HTTPS_CERT=/run/secrets/https_cert
+            - ILIAS_NGINX_HTTPS_KEY=/run/secrets/https_key
+            [- ILIAS_NGINX_HTTPS_DHPARAM=/run/secrets/https_pem]
+        ports:
+            - [%host_ip%:]443:443
+        secrets:
+            - https_cert
+            - https_key
+            [- https_pem]
 secrets:
-  https_cert:
-    file: ./data/certs/ilias.crt
-  https_key:
-    file: ./data/certs/ilias.key
-  [https_pem:
-    file: ./data/certs/ilias.pem]
+    https_cert:
+        file: ./data/certs/ilias.crt
+    https_key:
+        file: ./data/certs/ilias.key
+    [https_pem:
+        file: ./data/certs/ilias.pem]
 ```
 
 *Redirect HTTP to HTTPS is supported*
@@ -234,16 +234,16 @@ secrets:
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_CHATROOM_HTTPS_CERT=/run/secrets/https_cert
-      - ILIAS_CHATROOM_HTTPS_KEY=/run/secrets/https_key
-      - ILIAS_CHATROOM_HTTPS_DHPARAM=/run/secrets/https_pem
-  chatroom:
-    secrets:
-      - https_cert
-      - https_key
-      - https_pem
+    ilias:
+        environment:
+            - ILIAS_CHATROOM_HTTPS_CERT=/run/secrets/https_cert
+            - ILIAS_CHATROOM_HTTPS_KEY=/run/secrets/https_key
+            - ILIAS_CHATROOM_HTTPS_DHPARAM=/run/secrets/https_pem
+    chatroom:
+        secrets:
+            - https_cert
+            - https_key
+            - https_pem
 ```
 
 ## SMTP
@@ -252,21 +252,21 @@ Currently, for send emails only an external smtp server is supported
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_SMTP_HOST=...
-      - ILIAS_SMTP_PORT=465
-      - ILIAS_SMTP_ENCRYPTION=tls
-      - ILIAS_SMPT_USER_FILE=/run/secrets/ilias_smtp_user
-      - ILIAS_SMTP_PASSWORD_FILE=/run/secrets/ilias_smtp_password
-    secret:
-      - ilias_smtp_user
-      - ilias_smtp_password
+    ilias:
+        environment:
+            - ILIAS_SMTP_HOST=...
+            - ILIAS_SMTP_PORT=465
+            - ILIAS_SMTP_ENCRYPTION=tls
+            - ILIAS_SMPT_USER_FILE=/run/secrets/ilias_smtp_user
+            - ILIAS_SMTP_PASSWORD_FILE=/run/secrets/ilias_smtp_password
+        secret:
+            - ilias_smtp_user
+            - ilias_smtp_password
 secrets:
-  ilias_smtp_user:
-    file: ./data/secrets/ilias_smtp_user
-  ilias_smtp_password:
-    file: ./data/secrets/ilias_smtp_password
+    ilias_smtp_user:
+        file: ./data/secrets/ilias_smtp_user
+    ilias_smtp_password:
+        file: ./data/secrets/ilias_smtp_password
 ```
 
 ## Development
@@ -275,18 +275,18 @@ secrets:
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_DEVMODE=true
+    ilias:
+        environment:
+            - ILIAS_DEVMODE=true
 ```
 
 ### PHP error reporting
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_PHP_DISPLAY_ERRORS=On
+    ilias:
+        environment:
+            - ILIAS_PHP_DISPLAY_ERRORS=On
 ```
 
 ### Source code
@@ -295,21 +295,21 @@ If you wish to live apply code changes, you can mount the source code as a volum
 
 ```yaml
 services:
-  ilias:
-    volumes:
-      - ./ilias:/var/www/html
-  nginx:
-    volumes:
-      - ./ilias:/var/www/html:ro
-  [cron:
-    volumes:
-      - ./ilias:/var/www/html:ro]
-  [ilserver:
-    volumes:
-      - ./ilias:/var/www/html:ro]
-  [chatroom:
-    volumes:
-      - ./ilias:/var/www/html:ro]
+    ilias:
+        volumes:
+            - ./ilias:/var/www/html
+    nginx:
+        volumes:
+            - ./ilias:/var/www/html:ro
+    [cron:
+        volumes:
+            - ./ilias:/var/www/html:ro]
+    [ilserver:
+        volumes:
+            - ./ilias:/var/www/html:ro]
+    [chatroom:
+        volumes:
+            - ./ilias:/var/www/html:ro]
 ```
 
 As base, you can copy the source code from your `ilias` image to your host
@@ -322,9 +322,9 @@ May you need to update the ILIAS core composer dependencies, but if you don't wi
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_WEB_DIR_COMPOSER_AUTO_INSTALL=true
+    ilias:
+        environment:
+            - ILIAS_WEB_DIR_COMPOSER_AUTO_INSTALL=true
 ```
 
 ### SMTP
@@ -333,14 +333,14 @@ You can use a development SMTP server with the follow config
 
 ```yaml
 services:
-  ilias:
-    environment:
-      - ILIAS_SMTP_HOST=smtp
-      - ILIAS_SMTP_PORT=1025
-  smtp:
-    image: mailhog/mailhog:latest
-    ports:
-      - [%host_ip%:]8025:8025
+    ilias:
+        environment:
+            - ILIAS_SMTP_HOST=smtp
+            - ILIAS_SMTP_PORT=1025
+    smtp:
+        image: mailhog/mailhog:latest
+        ports:
+            - [%host_ip%:]8025:8025
 ```
 
 ### Xdebug
