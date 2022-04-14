@@ -351,8 +351,8 @@ Not supported
 
 You can find more information per image in
 
-- [flux-ilias-ilias-base](https://github.com/fluxapps/flux-ilias-ilias-base)
-- [flux-ilias-nginx-base](https://github.com/fluxapps/flux-ilias-nginx-base)
-- [flux-ilias-cron-base](https://github.com/fluxapps/flux-ilias-cron-base)
-- [flux-ilias-ilserver-base](https://github.com/fluxapps/flux-ilias-ilserver-base)
-- [flux-ilias-chatroom-base](https://github.com/fluxapps/flux-ilias-chatroom-base)
+- [flux-ilias-ilias-base](https://github.com/flux-caps/flux-ilias-ilias-base)
+- [flux-ilias-nginx-base](https://github.com/flux-caps/flux-ilias-nginx-base)
+- [flux-ilias-cron-base](https://github.com/flux-caps/flux-ilias-cron-base)
+- [flux-ilias-ilserver-base](https://github.com/flux-caps/flux-ilias-ilserver-base)
+- [flux-ilias-chatroom-base](https://github.com/flux-caps/flux-ilias-chatroom-base)
