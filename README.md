@@ -51,7 +51,6 @@ Create a `docker-compose.yaml` for run the containers
 *You need to adjust placeholders and create secret files (Applies everywhere)*
 
 ```yaml
-version: "3.6"
 services:
     database:
         command: --character-set-server=utf8 --collation-server=utf8_general_ci
