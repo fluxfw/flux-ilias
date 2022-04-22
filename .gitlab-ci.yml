@@ -1,5 +1,8 @@
+stages:
+    - repository
+
 flux-publish-utils:
-    stage: build
+    stage: repository
     image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/flux-publish-utils:latest
     script:
         - "false"
