@@ -5,6 +5,6 @@ flux-publish-utils:
     stage: repository
     image: $CI_REGISTRY/$CI_PROJECT_NAMESPACE/flux-publish-utils:latest
     script:
-        - "false"
+        - publish-utils
     only:
         - main
