@@ -333,6 +333,8 @@ You can use a development SMTP server with the follow config
 ```yaml
 services:
     ilias:
+        depends_on:
+            - smtp
         environment:
             - ILIAS_SMTP_HOST=smtp
             - ILIAS_SMTP_PORT=1025
