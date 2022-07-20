@@ -18,17 +18,17 @@ ILIAS base docker images
 
 ## database, ilias and nginx
 
-Extends the ilias base image in a custom `Dockerfile` and download ILIAS core with the wished version
+Extends the ilias base image in a custom `Dockerfile` and install ILIAS core with the wished version
 
 ```dockerfile
 FROM fluxfw/flux-ilias-ilias-base:php7.4 AS ilias
-RUN /flux-ilias-ilias-base/bin/download-ilias-core.sh %version%
+RUN /flux-ilias-ilias-base/bin/install-ilias-core.sh %version%
 ```
 
-You may wish to download other things like plugins or skins or apply some patches
+You may wish to install other things like plugins or skins or apply some patches
 
 ```dockerfile
-RUN /flux-ilias-ilias-base/bin/download-archive.sh https://github.com/x/y/archive/z.tar.gz /var/www/html/Customizing/global/plugins/Services/X/Y/Z
+RUN /flux-ilias-ilias-base/bin/install-archive.sh https://github.com/x/y/archive/z.tar.gz /var/www/html/Customizing/global/plugins/Services/X/Y/Z
 ```
 
 Extends the nginx base image too in the same `Dockerfile` and copy your ILIAS code base from your ilias image
