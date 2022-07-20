@@ -22,14 +22,13 @@ Extends the ilias base image in a custom `Dockerfile` and download ILIAS core wi
 
 ```dockerfile
 FROM fluxfw/flux-ilias-ilias-base:php7.4 AS ilias
-
 RUN /flux-ilias-ilias-base/bin/download-ilias-core.sh %version%
 ```
 
-You may wish to download or copy other things like plugins or skins or apply some patches
+You may wish to download other things like plugins or skins or apply some patches
 
 ```dockerfile
-RUN (mkdir -p /var/www/html/Customizing/global/plugins/Services/X/Y/Z && cd /var/www/html/Customizing/global/plugins/Services/X/Y/Z && wget -O - https://github.com/x/y/archive/z.tar.gz | tar -xz --strip-components=1)
+RUN /flux-ilias-ilias-base/bin/download-archive.sh https://github.com/x/y/archive/z.tar.gz /var/www/html/Customizing/global/plugins/Services/X/Y/Z
 ```
 
 Extends the nginx base image too in the same `Dockerfile` and copy your ILIAS code base from your ilias image
