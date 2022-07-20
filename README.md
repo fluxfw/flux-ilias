@@ -18,26 +18,31 @@ ILIAS base docker images
 
 ## database, ilias and nginx
 
-Extends the basic images in a custom `Dockerfile` and copy the ILIAS source code and install composer dependencies
-
-You may wish to copy other things like plugins or skins or apply some patches
+Extends the ilias base image in a custom `Dockerfile` and download ILIAS core with the wished version
 
 ```dockerfile
 FROM fluxfw/flux-ilias-ilias-base:php7.4 AS ilias
 
-RUN (cd $ILIAS_WEB_DIR && wget -O - https://github.com/ILIAS-eLearning/ILIAS/archive/release_7.tar.gz | tar -xz --strip-components=1 && composer install --no-dev) && \
-    (mkdir -p $ILIAS_WEB_DIR/Customizing/global/plugins/Services/X/Y/Z && cd $ILIAS_WEB_DIR/Customizing/global/plugins/Services/X/Y/Z && wget -O - https://github.com/x/y/archive/z.tar.gz | tar -xz --strip-components=1) && \
-    ...
+RUN /flux-ilias-ilias-base/bin/download-ilias-core.sh %version%
+```
 
+You may wish to download or copy other things like plugins or skins or apply some patches
+
+```dockerfile
+RUN (mkdir -p /var/www/html/Customizing/global/plugins/Services/X/Y/Z && cd /var/www/html/Customizing/global/plugins/Services/X/Y/Z && wget -O - https://github.com/x/y/archive/z.tar.gz | tar -xz --strip-components=1)
+```
+
+Extends the nginx base image too in the same `Dockerfile` and copy your ILIAS code base from your ilias image
+
+```dockerfile
 FROM fluxfw/flux-ilias-nginx-base:latest AS nginx
-COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+COPY --from=ilias /var/www/html /var/www/html
 ```
 
 Currently, the follow versions are supported
 
 - ILIAS 6 or newer
 - PHP 7.4, 7.3 and 7.2 (8.0 is available only for development purposes)
-- Both Composer 1 and Composer 2 are available
 
 You can build your custom images with
 
@@ -103,7 +108,7 @@ secrets:
 
 ```dockerfile
 FROM fluxfw/flux-ilias-cron-base:php7.4 AS cron
-COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+COPY --from=ilias /var/www/html /var/www/html
 ```
 
 ```shell
@@ -137,7 +142,7 @@ secrets:
 
 ```dockerfile
 FROM fluxfw/flux-ilias-ilserver-base:java8 AS ilserver
-COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+COPY --from=ilias /var/www/html /var/www/html
 ```
 
 ```shell
@@ -162,7 +167,7 @@ services:
 
 ```dockerfile
 FROM fluxfw/flux-ilias-chatroom-base:nodejs10 AS chatroom
-COPY --from=ilias $ILIAS_WEB_DIR $ILIAS_WEB_DIR
+COPY --from=ilias /var/www/html /var/www/html
 ```
 
 ```shell
