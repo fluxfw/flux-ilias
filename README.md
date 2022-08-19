@@ -54,6 +54,8 @@ Create a `docker-compose.yaml` for run the containers
 
 *You need to adjust placeholders and create secret files (Applies everywhere)*
 
+*At first start you may need to adjust volume permissions, look in docker logs for get more informations*
+
 ```yaml
 services:
     database:
