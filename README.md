@@ -41,7 +41,7 @@ COPY --from=ilias /var/www/html /var/www/html
 Currently, the follow versions are supported
 
 - ILIAS 6 or newer
-- PHP 7.4, 7.3 and 7.2 (8.0 is available only for development purposes)
+- PHP 7.4 (8.0 is available only for development purposes)
 
 You can build your custom images with
 
