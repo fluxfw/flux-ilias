@@ -187,6 +187,19 @@ services:
             - ./data/ilias:/var/iliasdata:ro
 ```
 
+## Manage system styles
+
+```dockerfile
+RUN /flux-ilias-ilias-base/bin/install-lessc.sh
+```
+
+```yaml
+services:
+    ilias:
+        environment:
+            - ILIAS_STYLE_MANAGE_SYSTEM_STYLES=true
+```
+
 ## Autostart
 
 *Note some containers needs that `ilias` is already init before start it (If it isn't the case, you may end in endless restarts of the containers)*
