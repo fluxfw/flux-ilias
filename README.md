@@ -129,6 +129,7 @@ services:
         environment:
             - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
         image: %image%/cron:latest
+        init: true
         secrets:
             - ilias_cron_password
         volumes:
