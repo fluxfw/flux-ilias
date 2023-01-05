@@ -107,28 +107,15 @@ secrets:
 
 ## cron
 
-```dockerfile
-FROM fluxfw/flux-ilias-cron-base:php7.4 AS cron
-COPY --from=ilias /var/www/html /var/www/html
-```
-
-```shell
-docker build . --pull --target cron -t %image%/cron:latest
-```
-
 ```yaml
 services:
-    ilias:
-        environment:
-            - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
-        secrets:
-            - ilias_cron_password
     cron:
         depends_on:
             - ilias
+        entrypoint: /flux-ilias-ilias-base/bin/cron.sh
         environment:
             - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
-        image: %image%/cron:latest
+        image: %image%/ilias:latest
         init: true
         secrets:
             - ilias_cron_password
@@ -374,6 +361,5 @@ You can find more information per image in
 
 - [flux-ilias-ilias-base](https://github.com/fluxfw/flux-ilias-ilias-base)
 - [flux-ilias-nginx-base](https://github.com/fluxfw/flux-ilias-nginx-base)
-- [flux-ilias-cron-base](https://github.com/fluxfw/flux-ilias-cron-base)
 - [flux-ilias-ilserver-base](https://github.com/fluxfw/flux-ilias-ilserver-base)
 - [flux-ilias-chatroom-base](https://github.com/fluxfw/flux-ilias-chatroom-base)
