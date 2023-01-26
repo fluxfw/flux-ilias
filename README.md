@@ -195,6 +195,12 @@ RUN /flux-ilias-ilias-base/bin/install-wkhtmltopdf.sh
 COPY --from=surnet/alpine-wkhtmltopdf:3.16.2-0.12.6-small /bin/wkhtmltopdf /usr/local/bin/wkhtmltopdf
 ```
 
+## Global cache
+
+```dockerfile
+RUN /flux-ilias-ilias-base/bin/install-apcu.sh
+```
+
 ## Autostart
 
 *Note some containers needs that `ilias` is already init before start it (If it isn't the case, you may end in endless restarts of the containers)*
