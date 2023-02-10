@@ -115,10 +115,12 @@ services:
         entrypoint: /flux-ilias-ilias-base/bin/cron.sh
         environment:
             - ILIAS_CRON_USER_PASSWORD_FILE=/run/secrets/ilias_cron_password
+            - ILIAS_ROOT_USER_PASSWORD_FILE=/run/secrets/ilias_root_password
         image: %image%/ilias:latest
         init: true
         secrets:
             - ilias_cron_password
+            - ilias_root_password
         volumes:
             - ./data/ilias:/var/iliasdata
             - ./data/log/ilias:/var/log/ilias
