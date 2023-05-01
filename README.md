@@ -31,6 +31,12 @@ You may wish to install other things like plugins or skins or apply some patches
 RUN /flux-ilias-ilias-base/bin/install-archive.sh https://github.com/x/y/archive/z.tar.gz /var/www/html/Customizing/global/plugins/Services/X/Y/Z
 ```
 
+If you have plugins and use ILIAS 8 you need to build `Services/Component/artifacts/plugin_data.php` again to update the built plugin metadata - Unfortunately it seems ILIAS core has no seperate command for this and it needs to build the whole core again (The wole is unnecessary since you use the ILIAS core build archive ...)
+
+```dockerfile
+RUN /flux-ilias-ilias-base/bin/run_ilias_build.sh
+```
+
 Extends the nginx base image too in the same `Dockerfile` and copy your ILIAS code base from your ilias image
 
 ```dockerfile
