@@ -21,7 +21,7 @@ ILIAS base docker images
 Extends the ilias base image in a custom `Dockerfile` and install ILIAS core with the wished version
 
 ```dockerfile
-FROM fluxfw/flux-ilias-ilias-base:php7.4 AS ilias
+FROM fluxfw/flux-ilias-ilias-base:php%php_version% AS ilias
 RUN /flux-ilias-ilias-base/bin/install-ilias-core.sh %version%
 ```
 
@@ -40,7 +40,7 @@ COPY --from=ilias /var/www/html /var/www/html
 
 Currently, the follow versions are supported
 
-- ILIAS 7 or newer
+- ILIAS 7 or 8
 - PHP 7.4 or 8.0
 
 You can build your custom images with
