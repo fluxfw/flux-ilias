@@ -160,29 +160,6 @@ services:
             - ./data/ilias:/var/iliasdata:ro
 ```
 
-## chatroom
-
-```dockerfile
-FROM fluxfw/flux-ilias-chatroom-base:nodejs10 AS chatroom
-COPY --from=ilias /var/www/html /var/www/html
-```
-
-```shell
-docker build . --pull --target chatroom -t %image%/chatroom:latest
-```
-
-```yaml
-services:
-    chatroom:
-        depends_on:
-            - ilias
-        image: %image%/chatroom:latest
-        ports:
-            - [%host_ip%:]8080:8080
-        volumes:
-            - ./data/ilias:/var/iliasdata:ro
-```
-
 ## Manage system styles
 
 ```dockerfile
@@ -225,8 +202,6 @@ services:
         restart: always]
     [ilserver:
         restart: always]
-    [chatroom:
-        restart: always]
 ```
 
 ## HTTPS
@@ -256,22 +231,6 @@ secrets:
 ```
 
 *Redirect HTTP to HTTPS is supported*
-
-### chatroom
-
-```yaml
-services:
-    ilias:
-        environment:
-            - ILIAS_CHATROOM_HTTPS_CERT=/run/secrets/https_cert
-            - ILIAS_CHATROOM_HTTPS_KEY=/run/secrets/https_key
-            - ILIAS_CHATROOM_HTTPS_DHPARAM=/run/secrets/https_pem
-    chatroom:
-        secrets:
-            - https_cert
-            - https_key
-            - https_pem
-```
 
 ## SMTP
 
@@ -383,4 +342,3 @@ You can find more information per image in
 - [flux-ilias-ilias-base](https://github.com/fluxfw/flux-ilias-ilias-base)
 - [flux-ilias-nginx-base](https://github.com/fluxfw/flux-ilias-nginx-base)
 - [flux-ilias-ilserver-base](https://github.com/fluxfw/flux-ilias-ilserver-base)
-- [flux-ilias-chatroom-base](https://github.com/fluxfw/flux-ilias-chatroom-base)

@@ -4,7 +4,6 @@
         "alpine",
         "base",
         "chat",
-        "chatroom",
         "cron",
         "docker",
         "fpm",
